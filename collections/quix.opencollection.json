@@ -1,0 +1,202 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Quix Cloud HTTP APIs",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Streaming Writer API",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create a new stream",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://writer-{{environmentId}}.cloud.quix.io/topics/{{topicName}}/streams",
+            "body": {
+              "type": "json",
+              "data": "{\"name\":\"my-stream\"}"
+            }
+          },
+          "docs": "Creates a new stream within a topic and returns its streamId."
+        },
+        {
+          "info": {
+            "name": "Send parameter data",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://writer-{{environmentId}}.cloud.quix.io/topics/{{topicName}}/streams/{{streamId}}/parameters/data",
+            "body": {
+              "type": "json",
+              "data": "{\"timestamps\":[1591733989000000000],\"numericValues\":{\"SomeParameter1\":[10.01]}}"
+            }
+          },
+          "docs": "Publishes time-series parameter samples to a stream."
+        },
+        {
+          "info": {
+            "name": "Send event data",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://writer-{{environmentId}}.cloud.quix.io/topics/{{topicName}}/streams/{{streamId}}/events/data",
+            "body": {
+              "type": "json",
+              "data": "[{\"id\":\"my-event\",\"timestamp\":1591733989000000000,\"value\":\"started\"}]"
+            }
+          },
+          "docs": "Publishes discrete events to a stream."
+        },
+        {
+          "info": {
+            "name": "Set parameter definitions",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://writer-{{environmentId}}.cloud.quix.io/topics/{{topicName}}/streams/{{streamId}}/parameters/definitions",
+            "body": {
+              "type": "json",
+              "data": "{\"parameters\":[{\"id\":\"SomeParameter1\",\"name\":\"Speed\",\"unit\":\"km/h\"}]}"
+            }
+          },
+          "docs": "Declares parameter definitions for a stream."
+        },
+        {
+          "info": {
+            "name": "Set event definitions",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://writer-{{environmentId}}.cloud.quix.io/topics/{{topicName}}/streams/{{streamId}}/events/definitions",
+            "body": {
+              "type": "json",
+              "data": "{\"events\":[{\"id\":\"my-event\",\"name\":\"My Event\",\"level\":\"Information\"}]}"
+            }
+          },
+          "docs": "Declares event definitions for a stream."
+        },
+        {
+          "info": {
+            "name": "Close a stream",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://writer-{{environmentId}}.cloud.quix.io/topics/{{topicName}}/streams/{{streamId}}/close",
+            "body": {
+              "type": "json",
+              "data": "{\"endStreamState\":\"Closed\"}"
+            }
+          },
+          "docs": "Marks a stream as closed."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Portal API",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List workspaces",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://portal-api.platform.quix.io/workspaces"
+          },
+          "docs": "Lists workspaces accessible to the authenticated account."
+        },
+        {
+          "info": {
+            "name": "List topics",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://portal-api.platform.quix.io/topics?workspaceId={{workspaceId}}"
+          },
+          "docs": "Lists Kafka topics in a workspace."
+        },
+        {
+          "info": {
+            "name": "Create a topic",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://portal-api.platform.quix.io/topics",
+            "body": {
+              "type": "json",
+              "data": "{\"name\":\"my-topic\",\"workspaceId\":\"{{workspaceId}}\"}"
+            }
+          },
+          "docs": "Creates a new Kafka topic in a workspace."
+        },
+        {
+          "info": {
+            "name": "List deployments",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://portal-api.platform.quix.io/deployments?workspaceId={{workspaceId}}"
+          },
+          "docs": "Lists service deployments in a workspace."
+        },
+        {
+          "info": {
+            "name": "Get a deployment",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://portal-api.platform.quix.io/deployments/{{deploymentId}}"
+          },
+          "docs": "Returns details and status for a single deployment."
+        },
+        {
+          "info": {
+            "name": "Start a deployment",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://portal-api.platform.quix.io/deployments/{{deploymentId}}/start"
+          },
+          "docs": "Starts a stopped deployment."
+        },
+        {
+          "info": {
+            "name": "Stop a deployment",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://portal-api.platform.quix.io/deployments/{{deploymentId}}/stop"
+          },
+          "docs": "Stops a running deployment."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,276 @@
+{
+  "info": {
+    "name": "Quix Cloud HTTP APIs",
+    "description": "Postman collection for the HTTP (REST) surfaces of Quix Cloud: the Streaming Writer API (write data into topics) and the account-wide Portal API (manage workspaces, topics, deployments). The Streaming Reader API is SignalR/WebSocket-based and is described in the AsyncAPI document, not here. All requests authenticate with a Quix Personal Access Token (PAT) bearer token.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "writerBaseUrl",
+      "value": "https://writer-{{environmentId}}.cloud.quix.io"
+    },
+    {
+      "key": "portalBaseUrl",
+      "value": "https://portal-api.platform.quix.io"
+    },
+    {
+      "key": "environmentId",
+      "value": "myorg-myproject-production"
+    },
+    {
+      "key": "topicName",
+      "value": "my-topic"
+    },
+    {
+      "key": "streamId",
+      "value": "my-stream"
+    },
+    {
+      "key": "workspaceId",
+      "value": "myorg-myproject-production"
+    },
+    {
+      "key": "deploymentId",
+      "value": "deployment-id"
+    }
+  ],
+  "item": [
+    {
+      "name": "Streaming Writer API",
+      "item": [
+        {
+          "name": "Create a new stream",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "url": {
+              "raw": "{{writerBaseUrl}}/topics/{{topicName}}/streams",
+              "host": ["{{writerBaseUrl}}"],
+              "path": ["topics", "{{topicName}}", "streams"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"my-stream\"\n}"
+            },
+            "description": "Creates a new stream within a topic and returns its streamId."
+          }
+        },
+        {
+          "name": "Send parameter data",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "url": {
+              "raw": "{{writerBaseUrl}}/topics/{{topicName}}/streams/{{streamId}}/parameters/data",
+              "host": ["{{writerBaseUrl}}"],
+              "path": ["topics", "{{topicName}}", "streams", "{{streamId}}", "parameters", "data"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"timestamps\": [1591733989000000000, 1591733990000000000],\n  \"numericValues\": {\n    \"SomeParameter1\": [10.01, 202.02],\n    \"SomeParameter2\": [400.04, 50.05]\n  }\n}"
+            },
+            "description": "Publishes time-series parameter samples to a stream."
+          }
+        },
+        {
+          "name": "Send event data",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "url": {
+              "raw": "{{writerBaseUrl}}/topics/{{topicName}}/streams/{{streamId}}/events/data",
+              "host": ["{{writerBaseUrl}}"],
+              "path": ["topics", "{{topicName}}", "streams", "{{streamId}}", "events", "data"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "[\n  {\n    \"id\": \"my-event\",\n    \"timestamp\": 1591733989000000000,\n    \"value\": \"started\"\n  }\n]"
+            },
+            "description": "Publishes discrete events to a stream."
+          }
+        },
+        {
+          "name": "Set parameter definitions",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "url": {
+              "raw": "{{writerBaseUrl}}/topics/{{topicName}}/streams/{{streamId}}/parameters/definitions",
+              "host": ["{{writerBaseUrl}}"],
+              "path": ["topics", "{{topicName}}", "streams", "{{streamId}}", "parameters", "definitions"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"parameters\": [\n    { \"id\": \"SomeParameter1\", \"name\": \"Speed\", \"unit\": \"km/h\" }\n  ]\n}"
+            },
+            "description": "Declares parameter definitions for a stream."
+          }
+        },
+        {
+          "name": "Set event definitions",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "url": {
+              "raw": "{{writerBaseUrl}}/topics/{{topicName}}/streams/{{streamId}}/events/definitions",
+              "host": ["{{writerBaseUrl}}"],
+              "path": ["topics", "{{topicName}}", "streams", "{{streamId}}", "events", "definitions"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"events\": [\n    { \"id\": \"my-event\", \"name\": \"My Event\", \"level\": \"Information\" }\n  ]\n}"
+            },
+            "description": "Declares event definitions for a stream."
+          }
+        },
+        {
+          "name": "Close a stream",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "url": {
+              "raw": "{{writerBaseUrl}}/topics/{{topicName}}/streams/{{streamId}}/close",
+              "host": ["{{writerBaseUrl}}"],
+              "path": ["topics", "{{topicName}}", "streams", "{{streamId}}", "close"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"endStreamState\": \"Closed\"\n}"
+            },
+            "description": "Marks a stream as closed."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Portal API",
+      "item": [
+        {
+          "name": "List workspaces",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{portalBaseUrl}}/workspaces",
+              "host": ["{{portalBaseUrl}}"],
+              "path": ["workspaces"]
+            },
+            "description": "Lists workspaces accessible to the authenticated account."
+          }
+        },
+        {
+          "name": "List topics",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{portalBaseUrl}}/topics?workspaceId={{workspaceId}}",
+              "host": ["{{portalBaseUrl}}"],
+              "path": ["topics"],
+              "query": [
+                { "key": "workspaceId", "value": "{{workspaceId}}" }
+              ]
+            },
+            "description": "Lists Kafka topics in a workspace."
+          }
+        },
+        {
+          "name": "Create a topic",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "url": {
+              "raw": "{{portalBaseUrl}}/topics",
+              "host": ["{{portalBaseUrl}}"],
+              "path": ["topics"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"my-topic\",\n  \"workspaceId\": \"{{workspaceId}}\"\n}"
+            },
+            "description": "Creates a new Kafka topic in a workspace."
+          }
+        },
+        {
+          "name": "List deployments",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{portalBaseUrl}}/deployments?workspaceId={{workspaceId}}",
+              "host": ["{{portalBaseUrl}}"],
+              "path": ["deployments"],
+              "query": [
+                { "key": "workspaceId", "value": "{{workspaceId}}" }
+              ]
+            },
+            "description": "Lists service deployments in a workspace."
+          }
+        },
+        {
+          "name": "Get a deployment",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{portalBaseUrl}}/deployments/{{deploymentId}}",
+              "host": ["{{portalBaseUrl}}"],
+              "path": ["deployments", "{{deploymentId}}"]
+            },
+            "description": "Returns details and status for a single deployment."
+          }
+        },
+        {
+          "name": "Start a deployment",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "url": {
+              "raw": "{{portalBaseUrl}}/deployments/{{deploymentId}}/start",
+              "host": ["{{portalBaseUrl}}"],
+              "path": ["deployments", "{{deploymentId}}", "start"]
+            },
+            "description": "Starts a stopped deployment."
+          }
+        },
+        {
+          "name": "Stop a deployment",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "url": {
+              "raw": "{{portalBaseUrl}}/deployments/{{deploymentId}}/stop",
+              "host": ["{{portalBaseUrl}}"],
+              "path": ["deployments", "{{deploymentId}}", "stop"]
+            },
+            "description": "Stops a running deployment."
+          }
+        }
+      ]
+    }
+  ]
+}

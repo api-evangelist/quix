@@ -1,0 +1,108 @@
+aid: quix
+name: Quix
+review:
+  question: Does Quix expose a documented public WebSocket API?
+  answer: true
+  date: '2026-06-21'
+  reviewer: API Evangelist
+  asyncapiSpecCreated: true
+  asyncapiScopeNote: |
+    Quix DOES publish a documented real-time WebSocket surface. The Streaming
+    Reader API is delivered over a Microsoft SignalR hub, and SignalR negotiates
+    WebSockets (wss://) as its primary transport for capable clients, falling
+    back to HTTP Long Polling only when WebSockets are unavailable. The
+    connection is bidirectional: clients invoke hub methods (SubscribeToParameter,
+    SubscribeToEvent, SubscribeToActiveStreams, SubscribeToTopicMetrics,
+    SubscribeToPackages and their Unsubscribe* counterparts) and receive
+    server-pushed events (ParameterDataReceived, EventDataReceived,
+    ActiveStreamsChanged, TopicMetricsUpdated, PackageReceived). An AsyncAPI 2.6
+    document was authored at asyncapi/quix-asyncapi.yml modeling this SignalR/
+    WebSocket hub. The Streaming Writer API (HTTP ingest) also exposes an
+    optional SignalR interface, but its HTTP REST surface and the HTTP/REST
+    Portal API are modeled in openapi/quix-openapi.yml.
+findings:
+  summary: |
+    Quix publishes a genuine, documented WebSocket API. The Streaming Reader API
+    is exclusively a Microsoft SignalR hub at
+    https://reader-{environmentId}.cloud.quix.io/hub; SignalR upgrades to
+    WebSockets (wss) for most clients. The Streaming Writer API additionally
+    offers a SignalR interface alongside its HTTP REST endpoints. Authentication
+    across all surfaces is by Quix Personal Access Token (PAT) bearer token (set
+    via accessTokenFactory for SignalR connections). This is distinct from the
+    Quix Streams open source Python library, which is not a hosted API.
+  transports:
+    - protocol: WebSocket
+      scheme: wss
+      via: Microsoft SignalR
+      hubURL: https://reader-{environmentId}.cloud.quix.io/hub
+      documented: true
+      note: >-
+        Streaming Reader API. SignalR negotiates WebSockets as primary transport,
+        Long Polling as fallback. Bidirectional - clients invoke hub methods and
+        receive pushed events.
+    - protocol: HTTP Long Polling
+      scheme: https
+      via: Microsoft SignalR
+      documented: true
+      note: SignalR fallback transport for the Streaming Reader hub when WebSockets are unavailable.
+    - protocol: REST
+      scheme: https
+      baseURL: https://writer-{environmentId}.cloud.quix.io
+      documented: true
+      note: Streaming Writer API HTTP ingest (also offers an optional SignalR interface).
+    - protocol: REST
+      scheme: https
+      baseURL: https://portal-api.platform.quix.io
+      documented: true
+      note: Account-wide Portal API for workspaces, topics, and deployments.
+  signalRHubMethodsConfirmed:
+    - SubscribeToParameter(topicName, streamId, parameterId)
+    - SubscribeToEvent(topicName, streamId, eventId)
+    - SubscribeToActiveStreams(topicName)
+    - SubscribeToTopicMetrics(topicName)
+    - SubscribeToPackages(topicName)
+    - UnsubscribeFromParameter(topicName, streamId, parameterId)
+    - UnsubscribeFromEvent(topicName, streamId, eventId)
+    - UnsubscribeFromActiveStreams(topicName)
+    - UnsubscribeFromTopicMetrics(topicName)
+    - UnsubscribeFromPackages(topicName)
+    - UnsubscribeFromStream(topicName, streamId)
+  signalREventsConfirmed:
+    - ParameterDataReceived
+    - EventDataReceived
+    - ActiveStreamsChanged
+    - TopicMetricsUpdated
+    - PackageReceived
+  endpointsConfirmedRestWriter:
+    - POST https://writer-{environmentId}.cloud.quix.io/topics/{topicName}/streams
+    - POST https://writer-{environmentId}.cloud.quix.io/topics/{topicName}/streams/{streamId}/parameters/data
+    - POST https://writer-{environmentId}.cloud.quix.io/topics/{topicName}/streams/{streamId}/events/data
+sources:
+  - url: https://quix.io/docs/develop/apis-overview.html
+    type: Documentation
+    note: Lists the Streaming Reader API (SignalR) and the account-wide Portal API (HTTP/REST).
+  - url: https://quix.io/docs/quix-cloud/apis/streaming-reader-api/overview.html
+    type: Documentation
+    note: Streaming Reader API hub at reader-<env>.cloud.quix.io/hub; SignalR over WebSockets/Long Polling; PAT via accessTokenFactory.
+  - url: https://quix.io/docs/quix-cloud/apis/streaming-reader-api/subscriptions.html
+    type: Documentation
+    note: Confirms exact SignalR hub methods and server-to-client events.
+  - url: https://www.quix.io/docs/develop/integrate-data/streaming-apis.html
+    type: Documentation
+    note: Writer API offers HTTP and SignalR; Reader API offers SignalR only; both use SignalR (WebSockets/Long Polling).
+  - url: https://github.com/quixio/quix-streams
+    type: SourceCode
+    note: Apache 2.0 open source Python stream-processing library; not a hosted API.
+actions:
+  asyncapiPath: asyncapi/quix-asyncapi.yml
+  openapiPath: openapi/quix-openapi.yml
+  apisYmlUpdated: true
+  reason: |
+    A documented WebSocket surface exists (SignalR over WebSockets), so the
+    review answer is true and an AsyncAPI 2.6 document was authored for the
+    Streaming Reader hub with WebSocket bindings and confirmed hub methods/
+    events. The HTTP REST surfaces (Streaming Writer ingest, Portal management)
+    were modeled in the companion OpenAPI document.
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

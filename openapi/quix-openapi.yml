@@ -1,0 +1,812 @@
+openapi: 3.0.1
+info:
+  title: Quix Cloud HTTP APIs
+  description: >-
+    OpenAPI 3.0 description of the HTTP (REST) surfaces of Quix Cloud: the
+    Streaming Writer API for publishing time-series parameter data, events, and
+    definitions into Quix topics, and the account-wide Portal API for managing
+    workspaces, topics, and deployments.
+
+
+    The Streaming Reader API is delivered exclusively over a Microsoft SignalR
+    hub (WebSockets / Long Polling) and is therefore modeled separately in the
+    companion AsyncAPI document at asyncapi/quix-asyncapi.yml, not here.
+
+
+    All endpoints authenticate with a Quix Personal Access Token (PAT) supplied
+    as an `Authorization: Bearer <PAT>` header. The Streaming Writer API base
+    host is environment-specific (`writer-{environmentId}.cloud.quix.io`); the
+    Portal API is account-wide (`portal-api.platform.quix.io`). Endpoint paths
+    are documented by Quix; per-environment Swagger/OpenAPI references are
+    available from the Quix portal under Settings > APIs and tokens.
+  termsOfService: https://quix.io/terms/
+  contact:
+    name: Quix Support
+    url: https://quix.io/contact/
+  license:
+    name: API documentation - Quix Terms
+    url: https://quix.io/terms/
+  version: '1.0'
+servers:
+  - url: https://writer-{environmentId}.cloud.quix.io
+    description: >-
+      Streaming Writer API. Environment-specific host; `{environmentId}` is the
+      URL-friendly combination of organization, project, and environment names
+      (e.g. `myorg-myproject-production`).
+    variables:
+      environmentId:
+        default: myorg-myproject-production
+        description: Quix environment (workspace) identifier.
+  - url: https://portal-api.platform.quix.io
+    description: >-
+      Portal API. Account-wide management host. The subdomain segment may differ
+      per Quix deployment; copy the exact Portal API base from the Quix portal
+      (Settings > APIs and tokens).
+tags:
+  - name: Streams
+    description: Create and close streams within a topic (Streaming Writer API).
+  - name: Parameter Data
+    description: Publish time-series parameter data into a stream (Streaming Writer API).
+  - name: Event Data
+    description: Publish discrete events into a stream (Streaming Writer API).
+  - name: Definitions
+    description: Declare parameter and event metadata for a stream (Streaming Writer API).
+  - name: Workspaces
+    description: Manage Quix Cloud workspaces / environments (Portal API).
+  - name: Topics
+    description: Manage Kafka topics in a workspace (Portal API).
+  - name: Deployments
+    description: Manage and monitor service deployments (Portal API).
+paths:
+  /topics/{topicName}/streams:
+    post:
+      operationId: createStream
+      tags:
+        - Streams
+      summary: Create a new stream
+      description: >-
+        Creates a new stream within the given topic. Returns the unique
+        `streamId`. A stream can also be created implicitly by publishing data
+        to a `streamId` that does not yet exist, removing the need to call this
+        endpoint explicitly.
+      servers:
+        - url: https://writer-{environmentId}.cloud.quix.io
+          variables:
+            environmentId:
+              default: myorg-myproject-production
+      parameters:
+        - $ref: '#/components/parameters/TopicName'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateStreamRequest'
+      responses:
+        '200':
+          description: Stream created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateStreamResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      security:
+        - bearerAuth: []
+  /topics/{topicName}/streams/{streamId}/parameters/data:
+    post:
+      operationId: sendParameterData
+      tags:
+        - Parameter Data
+      summary: Send parameter data
+      description: >-
+        Publishes one or more time-series parameter samples to a stream. The
+        payload carries an array of nanosecond `timestamps` plus values keyed by
+        parameter name under `numericValues`, `stringValues`, and/or
+        `binaryValues`. Publishing to a non-existent `streamId` implicitly
+        creates the stream.
+      servers:
+        - url: https://writer-{environmentId}.cloud.quix.io
+          variables:
+            environmentId:
+              default: myorg-myproject-production
+      parameters:
+        - $ref: '#/components/parameters/TopicName'
+        - $ref: '#/components/parameters/StreamId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ParameterDataRequest'
+      responses:
+        '200':
+          description: Data accepted.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      security:
+        - bearerAuth: []
+  /topics/{topicName}/streams/{streamId}/events/data:
+    post:
+      operationId: sendEventData
+      tags:
+        - Event Data
+      summary: Send event data
+      description: >-
+        Publishes one or more discrete events to a stream. Each event carries a
+        nanosecond `timestamp`, an `id`, an optional `value`, and optional
+        `tags`.
+      servers:
+        - url: https://writer-{environmentId}.cloud.quix.io
+          variables:
+            environmentId:
+              default: myorg-myproject-production
+      parameters:
+        - $ref: '#/components/parameters/TopicName'
+        - $ref: '#/components/parameters/StreamId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EventDataRequest'
+      responses:
+        '200':
+          description: Events accepted.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      security:
+        - bearerAuth: []
+  /topics/{topicName}/streams/{streamId}/parameters/definitions:
+    post:
+      operationId: setParameterDefinitions
+      tags:
+        - Definitions
+      summary: Set parameter definitions
+      description: >-
+        Declares the parameter definitions (names, display names, units, ranges,
+        formats) for a stream so consumers can interpret incoming parameter
+        data.
+      servers:
+        - url: https://writer-{environmentId}.cloud.quix.io
+          variables:
+            environmentId:
+              default: myorg-myproject-production
+      parameters:
+        - $ref: '#/components/parameters/TopicName'
+        - $ref: '#/components/parameters/StreamId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ParameterDefinitionsRequest'
+      responses:
+        '200':
+          description: Definitions stored.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      security:
+        - bearerAuth: []
+  /topics/{topicName}/streams/{streamId}/events/definitions:
+    post:
+      operationId: setEventDefinitions
+      tags:
+        - Definitions
+      summary: Set event definitions
+      description: >-
+        Declares the event definitions (ids, names, descriptions, severity
+        levels) for a stream so consumers can interpret incoming events.
+      servers:
+        - url: https://writer-{environmentId}.cloud.quix.io
+          variables:
+            environmentId:
+              default: myorg-myproject-production
+      parameters:
+        - $ref: '#/components/parameters/TopicName'
+        - $ref: '#/components/parameters/StreamId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EventDefinitionsRequest'
+      responses:
+        '200':
+          description: Definitions stored.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      security:
+        - bearerAuth: []
+  /topics/{topicName}/streams/{streamId}/close:
+    post:
+      operationId: closeStream
+      tags:
+        - Streams
+      summary: Close a stream
+      description: >-
+        Marks a stream as closed, signaling to consumers that no further data
+        will be published. An optional end state (e.g. Closed, Aborted,
+        Terminated) may be supplied.
+      servers:
+        - url: https://writer-{environmentId}.cloud.quix.io
+          variables:
+            environmentId:
+              default: myorg-myproject-production
+      parameters:
+        - $ref: '#/components/parameters/TopicName'
+        - $ref: '#/components/parameters/StreamId'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CloseStreamRequest'
+      responses:
+        '200':
+          description: Stream closed.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      security:
+        - bearerAuth: []
+  /workspaces:
+    get:
+      operationId: getWorkspaces
+      tags:
+        - Workspaces
+      summary: List workspaces
+      description: >-
+        Returns the workspaces (environments) accessible to the authenticated
+        account. (Portal API.)
+      servers:
+        - url: https://portal-api.platform.quix.io
+      responses:
+        '200':
+          description: A list of workspaces.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Workspace'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      security:
+        - bearerAuth: []
+  /workspaces/{workspaceId}:
+    get:
+      operationId: getWorkspace
+      tags:
+        - Workspaces
+      summary: Get a workspace
+      description: Returns details for a single workspace. (Portal API.)
+      servers:
+        - url: https://portal-api.platform.quix.io
+      parameters:
+        - $ref: '#/components/parameters/WorkspaceId'
+      responses:
+        '200':
+          description: Workspace details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Workspace'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      security:
+        - bearerAuth: []
+  /topics:
+    get:
+      operationId: getTopics
+      tags:
+        - Topics
+      summary: List topics
+      description: >-
+        Returns Kafka topics for a workspace. (Portal API.) The workspace is
+        typically supplied as a `workspaceId` query parameter.
+      servers:
+        - url: https://portal-api.platform.quix.io
+      parameters:
+        - name: workspaceId
+          in: query
+          required: true
+          schema:
+            type: string
+          description: The workspace the topics belong to.
+      responses:
+        '200':
+          description: A list of topics.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Topic'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      security:
+        - bearerAuth: []
+    post:
+      operationId: createTopic
+      tags:
+        - Topics
+      summary: Create a topic
+      description: Creates a new Kafka topic in a workspace. (Portal API.)
+      servers:
+        - url: https://portal-api.platform.quix.io
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTopicRequest'
+      responses:
+        '200':
+          description: Topic created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Topic'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      security:
+        - bearerAuth: []
+  /topics/{topicId}:
+    delete:
+      operationId: deleteTopic
+      tags:
+        - Topics
+      summary: Delete a topic
+      description: Deletes a Kafka topic from a workspace. (Portal API.)
+      servers:
+        - url: https://portal-api.platform.quix.io
+      parameters:
+        - name: topicId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Topic deleted.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      security:
+        - bearerAuth: []
+  /deployments:
+    get:
+      operationId: getDeployments
+      tags:
+        - Deployments
+      summary: List deployments
+      description: >-
+        Returns the service deployments in a workspace. (Portal API.) The
+        workspace is typically supplied as a `workspaceId` query parameter.
+      servers:
+        - url: https://portal-api.platform.quix.io
+      parameters:
+        - name: workspaceId
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: A list of deployments.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Deployment'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      security:
+        - bearerAuth: []
+    post:
+      operationId: createDeployment
+      tags:
+        - Deployments
+      summary: Create a deployment
+      description: >-
+        Creates a service or job deployment from a project/application in a
+        workspace. (Portal API.)
+      servers:
+        - url: https://portal-api.platform.quix.io
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateDeploymentRequest'
+      responses:
+        '200':
+          description: Deployment created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Deployment'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      security:
+        - bearerAuth: []
+  /deployments/{deploymentId}:
+    get:
+      operationId: getDeployment
+      tags:
+        - Deployments
+      summary: Get a deployment
+      description: Returns details and status for a single deployment. (Portal API.)
+      servers:
+        - url: https://portal-api.platform.quix.io
+      parameters:
+        - $ref: '#/components/parameters/DeploymentId'
+      responses:
+        '200':
+          description: Deployment details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Deployment'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      security:
+        - bearerAuth: []
+  /deployments/{deploymentId}/start:
+    put:
+      operationId: startDeployment
+      tags:
+        - Deployments
+      summary: Start a deployment
+      description: Starts a stopped deployment. (Portal API.)
+      servers:
+        - url: https://portal-api.platform.quix.io
+      parameters:
+        - $ref: '#/components/parameters/DeploymentId'
+      responses:
+        '200':
+          description: Deployment starting.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      security:
+        - bearerAuth: []
+  /deployments/{deploymentId}/stop:
+    put:
+      operationId: stopDeployment
+      tags:
+        - Deployments
+      summary: Stop a deployment
+      description: Stops a running deployment. (Portal API.)
+      servers:
+        - url: https://portal-api.platform.quix.io
+      parameters:
+        - $ref: '#/components/parameters/DeploymentId'
+      responses:
+        '200':
+          description: Deployment stopping.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      security:
+        - bearerAuth: []
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: PAT
+      description: >-
+        Quix Personal Access Token (PAT) presented as
+        `Authorization: Bearer <PAT>`. Generate from the Quix portal under your
+        profile > Personal Access Tokens, or Settings > APIs and tokens.
+  parameters:
+    TopicName:
+      name: topicName
+      in: path
+      required: true
+      description: The name of the topic the stream belongs to.
+      schema:
+        type: string
+    StreamId:
+      name: streamId
+      in: path
+      required: true
+      description: >-
+        The unique identifier of the stream. Publishing to an id that does not
+        exist creates the stream implicitly.
+      schema:
+        type: string
+    WorkspaceId:
+      name: workspaceId
+      in: path
+      required: true
+      description: The workspace (environment) identifier.
+      schema:
+        type: string
+    DeploymentId:
+      name: deploymentId
+      in: path
+      required: true
+      description: The deployment identifier.
+      schema:
+        type: string
+  responses:
+    Unauthorized:
+      description: >-
+        Authentication failed - the bearer token is missing, malformed, or
+        expired.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    CreateStreamRequest:
+      type: object
+      description: Optional metadata for the new stream.
+      properties:
+        name:
+          type: string
+          description: Human-readable stream name.
+        location:
+          type: string
+          description: Hierarchical stream location path within the topic.
+        metadata:
+          type: object
+          additionalProperties:
+            type: string
+          description: Arbitrary key/value metadata.
+        parents:
+          type: array
+          items:
+            type: string
+          description: Parent stream ids for derived streams.
+    CreateStreamResponse:
+      type: object
+      required:
+        - streamId
+      properties:
+        streamId:
+          type: string
+          description: The unique identifier of the newly created stream.
+    ParameterDataRequest:
+      type: object
+      required:
+        - timestamps
+      description: >-
+        Time-series parameter samples. `timestamps` holds one nanosecond epoch
+        value per sample; each value object is keyed by parameter name and each
+        array aligns positionally with `timestamps`.
+      properties:
+        timestamps:
+          type: array
+          items:
+            type: integer
+            format: int64
+          description: Nanosecond epoch timestamps, one per sample.
+        numericValues:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: number
+          description: Numeric parameter values keyed by parameter name.
+        stringValues:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: string
+          description: String parameter values keyed by parameter name.
+        binaryValues:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: string
+              format: byte
+          description: Base64-encoded binary parameter values keyed by parameter name.
+        tagValues:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: string
+          description: Tag values keyed by tag name, aligned with timestamps.
+      example:
+        timestamps:
+          - 1591733989000000000
+          - 1591733990000000000
+          - 1591733991000000000
+        numericValues:
+          SomeParameter1:
+            - 10.01
+            - 202.02
+            - 303.03
+          SomeParameter2:
+            - 400.04
+            - 50.05
+            - 60.06
+    EventDataRequest:
+      type: array
+      description: An array of discrete events to publish.
+      items:
+        type: object
+        required:
+          - id
+          - timestamp
+        properties:
+          id:
+            type: string
+            description: The event definition id.
+          timestamp:
+            type: integer
+            format: int64
+            description: Nanosecond epoch timestamp of the event.
+          value:
+            type: string
+            description: Optional event payload value.
+          tags:
+            type: object
+            additionalProperties:
+              type: string
+            description: Optional tags for the event.
+    ParameterDefinitionsRequest:
+      type: object
+      description: Parameter definitions for the stream.
+      properties:
+        parameters:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+              name:
+                type: string
+              unit:
+                type: string
+              minimumValue:
+                type: number
+              maximumValue:
+                type: number
+              format:
+                type: string
+    EventDefinitionsRequest:
+      type: object
+      description: Event definitions for the stream.
+      properties:
+        events:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+              name:
+                type: string
+              description:
+                type: string
+              level:
+                type: string
+                enum:
+                  - Trace
+                  - Debug
+                  - Information
+                  - Warning
+                  - Error
+                  - Critical
+    CloseStreamRequest:
+      type: object
+      properties:
+        endStreamState:
+          type: string
+          enum:
+            - Closed
+            - Aborted
+            - Terminated
+          description: The terminal state of the stream.
+    Workspace:
+      type: object
+      properties:
+        workspaceId:
+          type: string
+        name:
+          type: string
+        status:
+          type: string
+        broker:
+          type: string
+          description: Managed Kafka broker type for the workspace.
+    Topic:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        workspaceId:
+          type: string
+        status:
+          type: string
+        partitions:
+          type: integer
+        retentionInMinutes:
+          type: integer
+        retentionInBytes:
+          type: integer
+    CreateTopicRequest:
+      type: object
+      required:
+        - name
+        - workspaceId
+      properties:
+        name:
+          type: string
+        workspaceId:
+          type: string
+        partitions:
+          type: integer
+        retentionInMinutes:
+          type: integer
+        retentionInBytes:
+          type: integer
+    Deployment:
+      type: object
+      properties:
+        deploymentId:
+          type: string
+        name:
+          type: string
+        workspaceId:
+          type: string
+        type:
+          type: string
+          enum:
+            - Service
+            - Job
+        status:
+          type: string
+          enum:
+            - Running
+            - Stopped
+            - Starting
+            - Stopping
+            - BuildFailed
+            - RuntimeError
+        replicas:
+          type: integer
+        cpuMillicores:
+          type: integer
+        memoryInMb:
+          type: integer
+    CreateDeploymentRequest:
+      type: object
+      required:
+        - name
+        - workspaceId
+      properties:
+        name:
+          type: string
+        workspaceId:
+          type: string
+        applicationId:
+          type: string
+        type:
+          type: string
+          enum:
+            - Service
+            - Job
+        replicas:
+          type: integer
+        cpuMillicores:
+          type: integer
+        memoryInMb:
+          type: integer
+    Error:
+      type: object
+      properties:
+        status:
+          type: integer
+        title:
+          type: string
+        detail:
+          type: string

@@ -1,0 +1,133 @@
+specification: API Commons Plans
+specificationVersion: '0.1'
+schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/Plans
+provider: Quix
+providerId: quix
+created: '2026-06-21'
+modified: '2026-06-21'
+reconciled: false
+tags:
+- Stream Processing
+- Real Time
+- Kafka
+- Python
+- Streaming Data
+- Plans
+description: >-
+  Quix splits cleanly into two offerings. Quix Streams is the open source
+  Python stream-processing library, free for everyone under the Apache 2.0
+  license with no account required. Quix Cloud is the managed platform (managed
+  Kafka, Kubernetes deployments, the Streaming Writer / Reader / Portal APIs);
+  it offers a 30-day free trial of the Professional tier with no credit card,
+  consumption-based paid usage, and a custom Enterprise tier (including BYOC /
+  on-premise hybrid). The HTTP and SignalR APIs themselves are features of a
+  Quix Cloud environment rather than separately priced products.
+notes: >-
+  Quix Cloud usage is consumption-based and tied to the compute, replicas, and
+  managed Kafka backing your deployments; specific per-unit rates are quoted by
+  Quix and are not published as a fixed public rate card. Verify the current
+  trial length and consumption units on the Quix pricing page during
+  reconciliation.
+sources:
+- https://quix.io/pricing
+- https://quix.io/quix-cloud
+- https://quix.io/quix-streams
+- https://github.com/quixio/quix-streams
+plans:
+- id: quix-streams-oss
+  name: Quix Streams (Open Source)
+  type: free
+  description: >-
+    The open source Python stream-processing library (pip install quixstreams),
+    Apache 2.0 licensed. Free to use anywhere against your own Apache Kafka; no
+    Quix account required.
+  entries:
+  - label: Quix Streams Library
+    name: quix_streams
+    type: flat
+    metric: license
+    limit: -1
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: free (Apache 2.0)
+    userMultiplied: false
+  elements:
+  - name: StreamingDataFrame
+  - name: Application Runtime
+  - name: Windowing & Aggregations
+  - name: Stateful Processing
+  - name: Streaming Joins
+  - name: Sources & Sinks Connectors
+- id: quix-cloud-trial
+  name: Quix Cloud Free Trial
+  type: trial
+  description: >-
+    30-day free trial of the Professional tier of Quix Cloud, no credit card
+    required. Includes managed Kafka, Kubernetes deployments, and access to the
+    Streaming Writer, Streaming Reader, and Portal APIs.
+  entries:
+  - label: 30-Day Professional Trial
+    name: cloud_trial
+    type: flat
+    metric: days
+    limit: 30
+    timeFrame: day
+    geo: global
+    unit: 1
+    price: free for 30 days
+    userMultiplied: false
+  elements:
+  - name: Managed Kafka
+  - name: Kubernetes Deployments
+  - name: Streaming Writer API
+  - name: Streaming Reader API
+  - name: Portal API
+- id: quix-cloud-professional
+  name: Quix Cloud Professional
+  type: usage
+  description: >-
+    Consumption-based managed platform. You pay for the compute, replicas, and
+    managed Kafka that back your running deployments and environments.
+  entries:
+  - label: Managed Compute & Kafka Usage
+    name: cloud_usage
+    type: usage
+    metric: compute
+    limit: -1
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: consumption-based - see Quix pricing page
+    userMultiplied: false
+  elements:
+  - name: Managed Kafka
+  - name: Kubernetes Deployments
+  - name: Streaming Writer API
+  - name: Streaming Reader API (SignalR/WebSocket)
+  - name: Portal API
+  - name: Pipeline Monitoring & CI/CD
+- id: quix-cloud-enterprise
+  name: Quix Cloud Enterprise
+  type: enterprise
+  description: >-
+    Custom commercial terms with volume pricing, BYOC / on-premise hybrid
+    edge-to-cloud deployment, dedicated support, and SLAs. Contact Quix sales.
+  entries:
+  - label: Enterprise Agreement
+    name: enterprise
+    type: flat
+    metric: contract
+    limit: -1
+    timeFrame: year
+    geo: global
+    unit: 1
+    price: contact sales
+    userMultiplied: false
+  elements:
+  - name: Custom Volume Pricing
+  - name: BYOC / On-Premise Hybrid
+  - name: Dedicated Support & SLAs
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

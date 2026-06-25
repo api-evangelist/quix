@@ -1,0 +1,107 @@
+specification: FinOps Framework
+specificationVersion: '1.0'
+schema: https://www.finops.org/framework/
+provider: Quix
+providerId: quix
+created: '2026-06-21'
+modified: '2026-06-21'
+reconciled: false
+tags:
+- Stream Processing
+- Real Time
+- Kafka
+- Python
+- Streaming Data
+- FinOps
+- Cost Management
+- FOCUS
+description: >-
+  FinOps view of Quix spend. The open source Quix Streams library is free
+  (Apache 2.0) and incurs cost only on the customer's own Kafka/compute. Quix
+  Cloud is the billable surface: consumption-based charges driven by the
+  managed Kafka and Kubernetes compute (replicas, CPU, memory) that back
+  running deployments and environments, after a 30-day Professional trial.
+  Enterprise adds custom volume pricing and BYOC/on-premise hybrid deployment.
+notes: >-
+  Quix Cloud does not publish a fixed per-unit public rate card; consumption
+  units and rates are quoted by Quix. Verify against the Quix pricing page and
+  your environment usage exports during reconciliation.
+sources:
+- https://quix.io/pricing
+- https://quix.io/quix-cloud
+- https://github.com/quixio/quix-streams
+- https://focus.finops.org/focus-specification/v1-3/
+alignedWith:
+  framework: FinOps Foundation Framework
+  frameworkUrl: https://www.finops.org/framework/
+  dataSpec: FOCUS
+  dataSpecVersion: '1.3'
+  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/
+publisherName: Quix
+serviceCategory: Analytics
+billingModel:
+  pricingCategory: Usage-Based
+  billingFrequency: Monthly
+  billingCurrency: USD
+  chargeCategories:
+  - Usage
+  - Purchase
+focusColumns:
+  ServiceName: Quix Cloud
+  ServiceCategory: Analytics
+  ProviderName: Quix
+  PublisherName: Quix
+  InvoiceIssuerName: Quix
+  BillingCurrency: USD
+  ChargeCategory: Usage
+  PricingCategory: Usage-Based
+meters:
+- name: deployment_compute
+  description: >-
+    Kubernetes compute consumed by running deployments, by CPU millicores and
+    memory across replicas.
+  unit: compute_hours
+  aggregation: sum
+  dimensions:
+  - workspace
+  - deployment
+- name: deployment_replicas
+  description: Replica count backing a deployment, multiplying its compute footprint.
+  unit: replicas
+  aggregation: sum
+  dimensions:
+  - workspace
+  - deployment
+- name: managed_kafka
+  description: >-
+    Managed Apache Kafka backing an environment (broker capacity, topics,
+    retention/storage).
+  unit: capacity
+  aggregation: sum
+  dimensions:
+  - workspace
+- name: environment_uptime
+  description: Wall-clock time an environment / its deployments are running.
+  unit: hours
+  aggregation: sum
+  dimensions:
+  - workspace
+principles:
+- name: Visibility
+  description: >-
+    Track per-workspace and per-deployment compute, replica, and Kafka usage in
+    Quix Cloud; identify always-on services vs. burst jobs.
+- name: Allocation
+  description: Map workspaces/environments and deployments to teams and cost centers.
+- name: Optimization
+  description: >-
+    Right-size replicas, CPU, and memory; stop idle deployments; offload steady
+    workloads to the free open source Quix Streams library on self-managed Kafka
+    where managed Cloud features are not required.
+- name: Accountability
+  description: >-
+    Assign owners per environment/deployment; review consumption monthly
+    against budget and the 30-day trial runway.
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

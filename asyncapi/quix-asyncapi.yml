@@ -1,0 +1,390 @@
+asyncapi: '2.6.0'
+id: 'urn:io:quix:streaming-reader-api:signalr'
+info:
+  title: Quix Streaming Reader API (SignalR / WebSocket)
+  version: '1.0.0'
+  description: |
+    AsyncAPI 2.6 description of the Quix **Streaming Reader API**, a real-time,
+    bidirectional surface delivered over a **Microsoft SignalR hub**. SignalR
+    negotiates the best available transport and, for the vast majority of
+    clients, uses **WebSockets** (`wss://`), falling back to Long Polling only
+    when WebSockets are unavailable.
+
+    Unlike many providers that only stream over one-way HTTP Server-Sent
+    Events, Quix exposes a genuine WebSocket API here: the client both invokes
+    hub methods (to subscribe / unsubscribe) and receives server-pushed events
+    (parameter data, events, active-stream changes, topic metrics, raw
+    packages) over the same persistent connection.
+
+    Hub endpoint (environment-specific):
+
+        https://reader-{environmentId}.cloud.quix.io/hub
+
+    Authentication is by Quix Personal Access Token (PAT), supplied to the
+    SignalR connection via `accessTokenFactory` (which sets the bearer token on
+    the negotiate/connect requests). Invalid or missing tokens raise an
+    `UnAuthorizedHubError`.
+
+    Only the Streaming Reader API is SignalR-based. The Streaming Writer API
+    (HTTP ingest) and the Portal API (management) are HTTP/REST and are modeled
+    in the companion OpenAPI document at openapi/quix-openapi.yml.
+  contact:
+    name: API Evangelist
+    email: kin@apievangelist.com
+    url: https://apievangelist.com
+  license:
+    name: API documentation - Quix Terms
+    url: https://quix.io/terms/
+  x-transport-notes:
+    transport: Microsoft SignalR
+    primaryProtocol: WebSocket (wss)
+    fallbackProtocol: HTTP Long Polling
+    direction: bidirectional (client invokes hub methods; server pushes events)
+    hubUrl: 'https://reader-{environmentId}.cloud.quix.io/hub'
+    auth: 'PAT bearer via SignalR accessTokenFactory'
+    isWebSocket: true
+    source: https://quix.io/docs/quix-cloud/apis/streaming-reader-api/overview.html
+defaultContentType: application/json
+servers:
+  readerHub:
+    url: 'reader-{environmentId}.cloud.quix.io/hub'
+    protocol: wss
+    protocolVersion: 'SignalR'
+    description: |
+      The Quix Streaming Reader SignalR hub for a specific environment.
+      `{environmentId}` is the URL-friendly combination of organization,
+      project, and environment names. SignalR upgrades the connection to
+      WebSockets (`wss://`) when supported, with Long Polling fallback.
+    variables:
+      environmentId:
+        default: myorg-myproject-production
+        description: Quix environment (workspace) identifier.
+    security:
+      - patAuth: []
+channels:
+  ParameterData:
+    description: |
+      Live time-series parameter data for a subscribed topic / stream /
+      parameter. The client opens the subscription by invoking the hub method
+      `SubscribeToParameter(topicName, streamId, parameterId)` (wildcard `*` is
+      supported for topic, stream, and parameter), and the server pushes a
+      `ParameterDataReceived` event for each matching batch of samples until
+      `UnsubscribeFromParameter(...)` is invoked.
+    bindings:
+      ws:
+        bindingVersion: '0.1.0'
+    publish:
+      operationId: subscribeToParameter
+      summary: Invoke hub method to subscribe to parameter data.
+      description: |
+        SignalR hub invocation: `SubscribeToParameter(topicName, streamId,
+        parameterId)`. After this call the server begins pushing
+        `ParameterDataReceived` events on this channel.
+      message:
+        $ref: '#/components/messages/SubscribeToParameter'
+    subscribe:
+      operationId: onParameterDataReceived
+      summary: Receive pushed parameter data (ParameterDataReceived).
+      message:
+        $ref: '#/components/messages/ParameterDataReceived'
+  EventData:
+    description: |
+      Live discrete events for a subscribed topic / stream / event. Opened with
+      hub method `SubscribeToEvent(topicName, streamId, eventId)`; the server
+      pushes `EventDataReceived` events. Closed with
+      `UnsubscribeFromEvent(...)`.
+    bindings:
+      ws:
+        bindingVersion: '0.1.0'
+    publish:
+      operationId: subscribeToEvent
+      summary: Invoke hub method to subscribe to event data.
+      message:
+        $ref: '#/components/messages/SubscribeToEvent'
+    subscribe:
+      operationId: onEventDataReceived
+      summary: Receive pushed event data (EventDataReceived).
+      message:
+        $ref: '#/components/messages/EventDataReceived'
+  ActiveStreams:
+    description: |
+      Notifications about streams becoming active or inactive on a topic.
+      Opened with `SubscribeToActiveStreams(topicName)`; the server pushes
+      `ActiveStreamsChanged` events with an action of `AddUpdate` or `Remove`.
+      Closed with `UnsubscribeFromActiveStreams(topicName)`.
+    bindings:
+      ws:
+        bindingVersion: '0.1.0'
+    publish:
+      operationId: subscribeToActiveStreams
+      summary: Invoke hub method to subscribe to active-stream changes.
+      message:
+        $ref: '#/components/messages/SubscribeToActiveStreams'
+    subscribe:
+      operationId: onActiveStreamsChanged
+      summary: Receive active-stream change notifications (ActiveStreamsChanged).
+      message:
+        $ref: '#/components/messages/ActiveStreamsChanged'
+  TopicMetrics:
+    description: |
+      Periodic topic metrics such as bytes-per-second and active stream count.
+      Opened with `SubscribeToTopicMetrics(topicName)`; the server pushes
+      `TopicMetricsUpdated` events. Closed with
+      `UnsubscribeFromTopicMetrics(topicName)`.
+    bindings:
+      ws:
+        bindingVersion: '0.1.0'
+    publish:
+      operationId: subscribeToTopicMetrics
+      summary: Invoke hub method to subscribe to topic metrics.
+      message:
+        $ref: '#/components/messages/SubscribeToTopicMetrics'
+    subscribe:
+      operationId: onTopicMetricsUpdated
+      summary: Receive topic metrics (TopicMetricsUpdated).
+      message:
+        $ref: '#/components/messages/TopicMetricsUpdated'
+  Packages:
+    description: |
+      Raw messages (packages) received on a topic. Opened with
+      `SubscribeToPackages(topicName)`; the server pushes `PackageReceived`
+      events. Closed with `UnsubscribeFromPackages(topicName)`.
+    bindings:
+      ws:
+        bindingVersion: '0.1.0'
+    publish:
+      operationId: subscribeToPackages
+      summary: Invoke hub method to subscribe to raw packages.
+      message:
+        $ref: '#/components/messages/SubscribeToPackages'
+    subscribe:
+      operationId: onPackageReceived
+      summary: Receive raw packages (PackageReceived).
+      message:
+        $ref: '#/components/messages/PackageReceived'
+components:
+  securitySchemes:
+    patAuth:
+      type: httpApiKey
+      in: header
+      name: Authorization
+      description: |
+        Quix Personal Access Token (PAT) bearer token. In SignalR clients it is
+        supplied through `accessTokenFactory: () => 'YOUR_PAT'`, which attaches
+        the token to the negotiate and connect requests. A missing or invalid
+        token results in `UnAuthorizedHubError`.
+  messages:
+    SubscribeToParameter:
+      name: SubscribeToParameter
+      title: Hub invocation - SubscribeToParameter
+      summary: Client-to-server SignalR invocation to subscribe to parameter data.
+      contentType: application/json
+      payload:
+        $ref: '#/components/schemas/ParameterSubscriptionArgs'
+    ParameterDataReceived:
+      name: ParameterDataReceived
+      title: Server event - ParameterDataReceived
+      summary: A batch of time-series parameter samples pushed by the hub.
+      contentType: application/json
+      payload:
+        $ref: '#/components/schemas/ParameterData'
+    SubscribeToEvent:
+      name: SubscribeToEvent
+      title: Hub invocation - SubscribeToEvent
+      summary: Client-to-server SignalR invocation to subscribe to event data.
+      contentType: application/json
+      payload:
+        $ref: '#/components/schemas/EventSubscriptionArgs'
+    EventDataReceived:
+      name: EventDataReceived
+      title: Server event - EventDataReceived
+      summary: A discrete event pushed by the hub.
+      contentType: application/json
+      payload:
+        $ref: '#/components/schemas/EventData'
+    SubscribeToActiveStreams:
+      name: SubscribeToActiveStreams
+      title: Hub invocation - SubscribeToActiveStreams
+      summary: Client-to-server SignalR invocation to subscribe to active-stream changes.
+      contentType: application/json
+      payload:
+        $ref: '#/components/schemas/TopicArg'
+    ActiveStreamsChanged:
+      name: ActiveStreamsChanged
+      title: Server event - ActiveStreamsChanged
+      summary: A stream was added/updated or removed on the topic.
+      contentType: application/json
+      payload:
+        $ref: '#/components/schemas/ActiveStreamChange'
+    SubscribeToTopicMetrics:
+      name: SubscribeToTopicMetrics
+      title: Hub invocation - SubscribeToTopicMetrics
+      summary: Client-to-server SignalR invocation to subscribe to topic metrics.
+      contentType: application/json
+      payload:
+        $ref: '#/components/schemas/TopicArg'
+    TopicMetricsUpdated:
+      name: TopicMetricsUpdated
+      title: Server event - TopicMetricsUpdated
+      summary: Periodic topic metrics pushed by the hub.
+      contentType: application/json
+      payload:
+        $ref: '#/components/schemas/TopicMetrics'
+    SubscribeToPackages:
+      name: SubscribeToPackages
+      title: Hub invocation - SubscribeToPackages
+      summary: Client-to-server SignalR invocation to subscribe to raw packages.
+      contentType: application/json
+      payload:
+        $ref: '#/components/schemas/TopicArg'
+    PackageReceived:
+      name: PackageReceived
+      title: Server event - PackageReceived
+      summary: A raw message received on the topic.
+      contentType: application/json
+      payload:
+        $ref: '#/components/schemas/Package'
+  schemas:
+    ParameterSubscriptionArgs:
+      type: object
+      description: Positional SignalR arguments for SubscribeToParameter.
+      required:
+        - topicName
+        - streamId
+        - parameterId
+      properties:
+        topicName:
+          type: string
+          description: Topic name, or `*` for all topics.
+        streamId:
+          type: string
+          description: Stream id, or `*` for all streams.
+        parameterId:
+          type: string
+          description: Parameter id, or `*` for all parameters.
+    EventSubscriptionArgs:
+      type: object
+      description: Positional SignalR arguments for SubscribeToEvent.
+      required:
+        - topicName
+        - streamId
+        - eventId
+      properties:
+        topicName:
+          type: string
+        streamId:
+          type: string
+        eventId:
+          type: string
+    TopicArg:
+      type: object
+      description: Positional SignalR argument carrying just the topic name.
+      required:
+        - topicName
+      properties:
+        topicName:
+          type: string
+    ParameterData:
+      type: object
+      description: A batch of time-series parameter samples.
+      properties:
+        topicName:
+          type: string
+        streamId:
+          type: string
+        timestamps:
+          type: array
+          items:
+            type: integer
+            format: int64
+          description: Nanosecond epoch timestamps, one per sample.
+        numericValues:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: number
+        stringValues:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: string
+        binaryValues:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: string
+              format: byte
+        tagValues:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: string
+    EventData:
+      type: object
+      description: A single discrete event.
+      properties:
+        topicName:
+          type: string
+        streamId:
+          type: string
+        id:
+          type: string
+        timestamp:
+          type: integer
+          format: int64
+        value:
+          type: string
+        tags:
+          type: object
+          additionalProperties:
+            type: string
+    ActiveStreamChange:
+      type: object
+      description: Notification that a stream was added/updated or removed.
+      properties:
+        stream:
+          type: object
+          properties:
+            streamId:
+              type: string
+            name:
+              type: string
+            topicName:
+              type: string
+            status:
+              type: string
+        action:
+          type: string
+          enum:
+            - AddUpdate
+            - Remove
+          description: Whether the stream was added/updated or removed.
+    TopicMetrics:
+      type: object
+      description: Periodic metrics for a topic.
+      properties:
+        topicName:
+          type: string
+        bytesPerSecond:
+          type: number
+        activeStreamCount:
+          type: integer
+    Package:
+      type: object
+      description: A raw message received on the topic.
+      properties:
+        topicName:
+          type: string
+        streamId:
+          type: string
+        timestamp:
+          type: integer
+          format: int64
+        value:
+          type: string
+          format: byte
+          description: Raw message payload.

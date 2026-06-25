@@ -1,0 +1,132 @@
+aid: quix
+url: https://raw.githubusercontent.com/api-evangelist/quix/refs/heads/main/apis.yml
+name: Quix
+kind: company
+description: Quix is a Python-native stream-processing platform for real-time data
+  and ML. It pairs Quix Streams - an open source (Apache 2.0) Python library for
+  building containerized stream-processing applications on Apache Kafka - with Quix
+  Cloud, a fully managed platform offering managed Kafka, Kubernetes deployments,
+  and a set of HTTP and SignalR/WebSocket APIs for writing data in, reading data out
+  in real time, and managing workspaces, topics, and deployments.
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+tags:
+- Stream Processing
+- Real Time
+- Kafka
+- Python
+- Streaming Data
+created: '2026-06-21'
+modified: '2026-06-21'
+specificationVersion: '0.19'
+apis:
+- aid: quix:streaming-writer-api
+  name: Quix Streaming Writer API
+  tags:
+  - Streaming
+  - Writer
+  - Ingest
+  - HTTP
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://quix.io/docs/quix-cloud/apis/streaming-writer-api/overview.html
+  baseURL: https://writer-{environmentId}.cloud.quix.io
+  properties:
+  - url: https://quix.io/docs/quix-cloud/apis/streaming-writer-api/overview.html
+    type: Documentation
+  - url: openapi/quix-openapi.yml
+    type: OpenAPI
+  description: Write time-series parameter data, events, and definitions into Quix
+    topics over HTTP REST (or SignalR), an alternative to the Quix Streams SDK for
+    any HTTP-capable language. Authenticated with a Personal Access Token (PAT)
+    bearer token.
+- aid: quix:streaming-reader-api
+  name: Quix Streaming Reader API (Real-time)
+  tags:
+  - Streaming
+  - Reader
+  - Real Time
+  - SignalR
+  - WebSocket
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://quix.io/docs/quix-cloud/apis/streaming-reader-api/overview.html
+  baseURL: https://reader-{environmentId}.cloud.quix.io/hub
+  properties:
+  - url: https://quix.io/docs/quix-cloud/apis/streaming-reader-api/overview.html
+    type: Documentation
+  - url: asyncapi/quix-asyncapi.yml
+    type: AsyncAPI
+  description: Subscribe to live parameter data, events, definitions, active streams,
+    topic metrics, and raw packages from Quix topics in real time over a Microsoft
+    SignalR hub (WebSockets, with Long Polling fallback). Authenticated with a PAT
+    via accessTokenFactory.
+- aid: quix:portal-api
+  name: Quix Portal API (Management)
+  tags:
+  - Management
+  - Portal
+  - Automation
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://quix.io/docs/develop/apis-overview.html
+  baseURL: https://portal-api.platform.quix.io
+  properties:
+  - url: https://quix.io/docs/develop/apis-overview.html
+    type: Documentation
+  - url: openapi/quix-openapi.yml
+    type: OpenAPI
+  description: Account-wide HTTP REST API to automate and monitor Quix Cloud
+    infrastructure - workspaces, topics, deployments, and persistent data - as an
+    alternative to the Quix portal UI and CLI. Authenticated with a PAT bearer token.
+- aid: quix:topics-deployments-api
+  name: Quix Topics & Deployments API
+  tags:
+  - Topics
+  - Deployments
+  - Infrastructure
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://quix.io/docs/develop/apis-overview.html
+  baseURL: https://portal-api.platform.quix.io
+  properties:
+  - url: https://quix.io/docs/develop/apis-overview.html
+    type: Documentation
+  - url: openapi/quix-openapi.yml
+    type: OpenAPI
+  description: The topic- and deployment-management surface of the Portal API -
+    create, list, update, and delete Kafka topics and manage the lifecycle (start,
+    stop, status) of pipeline service deployments in a workspace.
+- aid: quix:quix-streams-oss
+  name: Quix Streams (Open Source)
+  tags:
+  - Open Source
+  - Python
+  - Kafka
+  - Library
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://quix.io/docs/quix-streams/introduction.html
+  baseURL: https://github.com/quixio/quix-streams
+  properties:
+  - url: https://quix.io/docs/quix-streams/introduction.html
+    type: Documentation
+  - url: https://github.com/quixio/quix-streams
+    type: SourceCode
+  description: Apache 2.0 open source Python library (pip install quixstreams) for
+    building containerized stream-processing applications on Apache Kafka, using a
+    declarative StreamingDataFrame and an Application runtime with windowing,
+    stateful processing, streaming joins, and sources/sinks. Requires Python 3.9+;
+    not a hosted API - included here as the OSS foundation of the platform.
+common:
+- type: GitHubOrganization
+  url: https://github.com/quixio
+- type: LinkedIn
+  url: https://www.linkedin.com/company/quix
+- type: Website
+  url: https://quix.io/
+- type: Documentation
+  url: https://quix.io/docs/
+- type: Plans
+  url: plans/quix-plans-pricing.yml
+- type: RateLimits
+  url: rate-limits/quix-rate-limits.yml
+- type: FinOps
+  url: finops/quix-finops.yml
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

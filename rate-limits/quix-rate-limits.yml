@@ -1,0 +1,72 @@
+specification: API Commons Rate Limits
+specificationVersion: '0.1'
+schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/RateLimits
+provider: Quix
+providerId: quix
+created: '2026-06-21'
+modified: '2026-06-21'
+reconciled: false
+tags:
+- Stream Processing
+- Real Time
+- Kafka
+- Python
+- Streaming Data
+- Rate Limiting
+- Quotas
+- Throttling
+description: >-
+  Quix does not publish a fixed numeric rate-limit table for its HTTP and
+  SignalR APIs. The practical throughput of the Streaming Writer API (HTTP),
+  Streaming Reader API (SignalR/WebSocket), and Portal API is bounded by the
+  capacity of the underlying managed Kafka and Kubernetes resources provisioned
+  for your Quix Cloud environment rather than by a per-key request quota.
+  Authentication uses Personal Access Tokens (PATs); expired or invalid tokens
+  return HTTP 401 (or an UnAuthorizedHubError on the SignalR hub).
+notes: >-
+  Confirm any environment- or account-level throttling, connection caps, or
+  message-size limits in the per-environment Swagger reference and Quix support
+  channels during reconciliation. The open source Quix Streams library is not
+  rate limited by Quix; its throughput is governed by your own Kafka cluster.
+sources:
+- https://quix.io/docs/develop/apis-overview.html
+- https://quix.io/docs/quix-cloud/apis/streaming-reader-api/overview.html
+- https://quix.io/pricing
+responseCodes:
+  unauthorized: 401
+limits:
+- name: Streaming Writer API Throughput
+  scope: environment
+  metric: requests
+  limit: see provider documentation
+  notes: >-
+    HTTP ingest throughput is bounded by the managed Kafka / compute capacity of
+    the environment, not a published per-key quota.
+- name: Streaming Reader API Connections
+  scope: environment
+  metric: connections
+  limit: see provider documentation
+  notes: >-
+    Concurrent SignalR (WebSocket) hub connections and subscriptions scale with
+    the environment's provisioned resources.
+- name: Portal API Requests
+  scope: account
+  metric: requests
+  limit: see provider documentation
+  notes: Account-wide management API; no fixed public request quota published.
+policies:
+- name: Token Authentication
+  description: >-
+    All API access requires a valid PAT bearer token; expired/invalid tokens
+    return 401 (HTTP) or UnAuthorizedHubError (SignalR).
+- name: Capacity-Bound Throughput
+  description: >-
+    Throughput scales with the managed Kafka and Kubernetes resources of the
+    Quix Cloud environment rather than a per-key rate limit.
+- name: Backoff Strategy
+  description: >-
+    Clients should implement retries with exponential backoff and reconnect
+    logic for the SignalR hub.
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com
