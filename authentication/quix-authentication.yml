@@ -1,0 +1,16 @@
+generated: '2026-07-11'
+method: derived
+source: openapi/quix-openapi.yml
+summary:
+  types:
+  - http
+schemes:
+- name: bearerAuth
+  type: http
+  scheme: bearer
+  bearerFormat: PAT
+  description: 'Quix Personal Access Token (PAT) presented as `Authorization: Bearer <PAT>`.
+    Generate from the Quix portal under your profile > Personal Access Tokens, or Settings >
+    APIs and tokens.'
+  sources:
+  - openapi/quix-openapi.yml

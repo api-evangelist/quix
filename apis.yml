@@ -113,6 +113,10 @@ apis:
     stateful processing, streaming joins, and sources/sinks. Requires Python 3.9+;
     not a hosted API - included here as the OSS foundation of the platform.
 common:
+- type: DomainSecurity
+  url: security/quix-domain-security.yml
+- type: Authentication
+  url: authentication/quix-authentication.yml
 - type: GitHubOrganization
   url: https://github.com/quixio
 - type: LinkedIn
@@ -127,6 +131,8 @@ common:
   url: rate-limits/quix-rate-limits.yml
 - type: FinOps
   url: finops/quix-finops.yml
+- url: https://quix.io/blog
+  type: Blog
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
