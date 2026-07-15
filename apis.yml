@@ -113,6 +113,8 @@ apis:
     stateful processing, streaming joins, and sources/sinks. Requires Python 3.9+;
     not a hosted API - included here as the OSS foundation of the platform.
 common:
+- type: AgenticAccess
+  url: agentic-access/quix-agentic-access.yml
 - type: DomainSecurity
   url: security/quix-domain-security.yml
 - type: Authentication
