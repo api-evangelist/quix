@@ -1,0 +1,119 @@
+openapi: 3.0.1
+info:
+  title: Quix Cloud HTTP APIs Definitions Workspaces API
+  description: 'OpenAPI 3.0 description of the HTTP (REST) surfaces of Quix Cloud: the Streaming Writer API for publishing time-series parameter data, events, and definitions into Quix topics, and the account-wide Portal API for managing workspaces, topics, and deployments.
+
+
+    The Streaming Reader API is delivered exclusively over a Microsoft SignalR hub (WebSockets / Long Polling) and is therefore modeled separately in the companion AsyncAPI document at asyncapi/quix-asyncapi.yml, not here.
+
+
+    All endpoints authenticate with a Quix Personal Access Token (PAT) supplied as an `Authorization: Bearer <PAT>` header. The Streaming Writer API base host is environment-specific (`writer-{environmentId}.cloud.quix.io`); the Portal API is account-wide (`portal-api.platform.quix.io`). Endpoint paths are documented by Quix; per-environment Swagger/OpenAPI references are available from the Quix portal under Settings > APIs and tokens.'
+  termsOfService: https://quix.io/terms/
+  contact:
+    name: Quix Support
+    url: https://quix.io/contact/
+  license:
+    name: API documentation - Quix Terms
+    url: https://quix.io/terms/
+  version: '1.0'
+servers:
+- url: https://writer-{environmentId}.cloud.quix.io
+  description: Streaming Writer API. Environment-specific host; `{environmentId}` is the URL-friendly combination of organization, project, and environment names (e.g. `myorg-myproject-production`).
+  variables:
+    environmentId:
+      default: myorg-myproject-production
+      description: Quix environment (workspace) identifier.
+- url: https://portal-api.platform.quix.io
+  description: Portal API. Account-wide management host. The subdomain segment may differ per Quix deployment; copy the exact Portal API base from the Quix portal (Settings > APIs and tokens).
+tags:
+- name: Workspaces
+  description: Manage Quix Cloud workspaces / environments (Portal API).
+paths:
+  /workspaces:
+    get:
+      operationId: getWorkspaces
+      tags:
+      - Workspaces
+      summary: List workspaces
+      description: Returns the workspaces (environments) accessible to the authenticated account. (Portal API.)
+      servers:
+      - url: https://portal-api.platform.quix.io
+      responses:
+        '200':
+          description: A list of workspaces.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Workspace'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      security:
+      - bearerAuth: []
+  /workspaces/{workspaceId}:
+    get:
+      operationId: getWorkspace
+      tags:
+      - Workspaces
+      summary: Get a workspace
+      description: Returns details for a single workspace. (Portal API.)
+      servers:
+      - url: https://portal-api.platform.quix.io
+      parameters:
+      - $ref: '#/components/parameters/WorkspaceId'
+      responses:
+        '200':
+          description: Workspace details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Workspace'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      security:
+      - bearerAuth: []
+components:
+  responses:
+    Unauthorized:
+      description: Authentication failed - the bearer token is missing, malformed, or expired.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    Workspace:
+      type: object
+      properties:
+        workspaceId:
+          type: string
+        name:
+          type: string
+        status:
+          type: string
+        broker:
+          type: string
+          description: Managed Kafka broker type for the workspace.
+    Error:
+      type: object
+      properties:
+        status:
+          type: integer
+        title:
+          type: string
+        detail:
+          type: string
+  parameters:
+    WorkspaceId:
+      name: workspaceId
+      in: path
+      required: true
+      description: The workspace (environment) identifier.
+      schema:
+        type: string
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: PAT
+      description: 'Quix Personal Access Token (PAT) presented as `Authorization: Bearer <PAT>`. Generate from the Quix portal under your profile > Personal Access Tokens, or Settings > APIs and tokens.'

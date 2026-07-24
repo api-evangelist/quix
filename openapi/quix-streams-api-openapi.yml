@@ -1,0 +1,167 @@
+openapi: 3.0.1
+info:
+  title: Quix Cloud HTTP APIs Definitions Streams API
+  description: 'OpenAPI 3.0 description of the HTTP (REST) surfaces of Quix Cloud: the Streaming Writer API for publishing time-series parameter data, events, and definitions into Quix topics, and the account-wide Portal API for managing workspaces, topics, and deployments.
+
+
+    The Streaming Reader API is delivered exclusively over a Microsoft SignalR hub (WebSockets / Long Polling) and is therefore modeled separately in the companion AsyncAPI document at asyncapi/quix-asyncapi.yml, not here.
+
+
+    All endpoints authenticate with a Quix Personal Access Token (PAT) supplied as an `Authorization: Bearer <PAT>` header. The Streaming Writer API base host is environment-specific (`writer-{environmentId}.cloud.quix.io`); the Portal API is account-wide (`portal-api.platform.quix.io`). Endpoint paths are documented by Quix; per-environment Swagger/OpenAPI references are available from the Quix portal under Settings > APIs and tokens.'
+  termsOfService: https://quix.io/terms/
+  contact:
+    name: Quix Support
+    url: https://quix.io/contact/
+  license:
+    name: API documentation - Quix Terms
+    url: https://quix.io/terms/
+  version: '1.0'
+servers:
+- url: https://writer-{environmentId}.cloud.quix.io
+  description: Streaming Writer API. Environment-specific host; `{environmentId}` is the URL-friendly combination of organization, project, and environment names (e.g. `myorg-myproject-production`).
+  variables:
+    environmentId:
+      default: myorg-myproject-production
+      description: Quix environment (workspace) identifier.
+- url: https://portal-api.platform.quix.io
+  description: Portal API. Account-wide management host. The subdomain segment may differ per Quix deployment; copy the exact Portal API base from the Quix portal (Settings > APIs and tokens).
+tags:
+- name: Streams
+  description: Create and close streams within a topic (Streaming Writer API).
+paths:
+  /topics/{topicName}/streams:
+    post:
+      operationId: createStream
+      tags:
+      - Streams
+      summary: Create a new stream
+      description: Creates a new stream within the given topic. Returns the unique `streamId`. A stream can also be created implicitly by publishing data to a `streamId` that does not yet exist, removing the need to call this endpoint explicitly.
+      servers:
+      - url: https://writer-{environmentId}.cloud.quix.io
+        variables:
+          environmentId:
+            default: myorg-myproject-production
+      parameters:
+      - $ref: '#/components/parameters/TopicName'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateStreamRequest'
+      responses:
+        '200':
+          description: Stream created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateStreamResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      security:
+      - bearerAuth: []
+  /topics/{topicName}/streams/{streamId}/close:
+    post:
+      operationId: closeStream
+      tags:
+      - Streams
+      summary: Close a stream
+      description: Marks a stream as closed, signaling to consumers that no further data will be published. An optional end state (e.g. Closed, Aborted, Terminated) may be supplied.
+      servers:
+      - url: https://writer-{environmentId}.cloud.quix.io
+        variables:
+          environmentId:
+            default: myorg-myproject-production
+      parameters:
+      - $ref: '#/components/parameters/TopicName'
+      - $ref: '#/components/parameters/StreamId'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CloseStreamRequest'
+      responses:
+        '200':
+          description: Stream closed.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      security:
+      - bearerAuth: []
+components:
+  responses:
+    Unauthorized:
+      description: Authentication failed - the bearer token is missing, malformed, or expired.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  parameters:
+    TopicName:
+      name: topicName
+      in: path
+      required: true
+      description: The name of the topic the stream belongs to.
+      schema:
+        type: string
+    StreamId:
+      name: streamId
+      in: path
+      required: true
+      description: The unique identifier of the stream. Publishing to an id that does not exist creates the stream implicitly.
+      schema:
+        type: string
+  schemas:
+    CreateStreamRequest:
+      type: object
+      description: Optional metadata for the new stream.
+      properties:
+        name:
+          type: string
+          description: Human-readable stream name.
+        location:
+          type: string
+          description: Hierarchical stream location path within the topic.
+        metadata:
+          type: object
+          additionalProperties:
+            type: string
+          description: Arbitrary key/value metadata.
+        parents:
+          type: array
+          items:
+            type: string
+          description: Parent stream ids for derived streams.
+    CloseStreamRequest:
+      type: object
+      properties:
+        endStreamState:
+          type: string
+          enum:
+          - Closed
+          - Aborted
+          - Terminated
+          description: The terminal state of the stream.
+    Error:
+      type: object
+      properties:
+        status:
+          type: integer
+        title:
+          type: string
+        detail:
+          type: string
+    CreateStreamResponse:
+      type: object
+      required:
+      - streamId
+      properties:
+        streamId:
+          type: string
+          description: The unique identifier of the newly created stream.
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: PAT
+      description: 'Quix Personal Access Token (PAT) presented as `Authorization: Bearer <PAT>`. Generate from the Quix portal under your profile > Personal Access Tokens, or Settings > APIs and tokens.'

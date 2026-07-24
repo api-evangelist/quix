@@ -1,0 +1,226 @@
+openapi: 3.0.1
+info:
+  title: Quix Cloud HTTP APIs Definitions Deployments API
+  description: 'OpenAPI 3.0 description of the HTTP (REST) surfaces of Quix Cloud: the Streaming Writer API for publishing time-series parameter data, events, and definitions into Quix topics, and the account-wide Portal API for managing workspaces, topics, and deployments.
+
+
+    The Streaming Reader API is delivered exclusively over a Microsoft SignalR hub (WebSockets / Long Polling) and is therefore modeled separately in the companion AsyncAPI document at asyncapi/quix-asyncapi.yml, not here.
+
+
+    All endpoints authenticate with a Quix Personal Access Token (PAT) supplied as an `Authorization: Bearer <PAT>` header. The Streaming Writer API base host is environment-specific (`writer-{environmentId}.cloud.quix.io`); the Portal API is account-wide (`portal-api.platform.quix.io`). Endpoint paths are documented by Quix; per-environment Swagger/OpenAPI references are available from the Quix portal under Settings > APIs and tokens.'
+  termsOfService: https://quix.io/terms/
+  contact:
+    name: Quix Support
+    url: https://quix.io/contact/
+  license:
+    name: API documentation - Quix Terms
+    url: https://quix.io/terms/
+  version: '1.0'
+servers:
+- url: https://writer-{environmentId}.cloud.quix.io
+  description: Streaming Writer API. Environment-specific host; `{environmentId}` is the URL-friendly combination of organization, project, and environment names (e.g. `myorg-myproject-production`).
+  variables:
+    environmentId:
+      default: myorg-myproject-production
+      description: Quix environment (workspace) identifier.
+- url: https://portal-api.platform.quix.io
+  description: Portal API. Account-wide management host. The subdomain segment may differ per Quix deployment; copy the exact Portal API base from the Quix portal (Settings > APIs and tokens).
+tags:
+- name: Deployments
+  description: Manage and monitor service deployments (Portal API).
+paths:
+  /deployments:
+    get:
+      operationId: getDeployments
+      tags:
+      - Deployments
+      summary: List deployments
+      description: Returns the service deployments in a workspace. (Portal API.) The workspace is typically supplied as a `workspaceId` query parameter.
+      servers:
+      - url: https://portal-api.platform.quix.io
+      parameters:
+      - name: workspaceId
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: A list of deployments.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Deployment'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      security:
+      - bearerAuth: []
+    post:
+      operationId: createDeployment
+      tags:
+      - Deployments
+      summary: Create a deployment
+      description: Creates a service or job deployment from a project/application in a workspace. (Portal API.)
+      servers:
+      - url: https://portal-api.platform.quix.io
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateDeploymentRequest'
+      responses:
+        '200':
+          description: Deployment created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Deployment'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      security:
+      - bearerAuth: []
+  /deployments/{deploymentId}:
+    get:
+      operationId: getDeployment
+      tags:
+      - Deployments
+      summary: Get a deployment
+      description: Returns details and status for a single deployment. (Portal API.)
+      servers:
+      - url: https://portal-api.platform.quix.io
+      parameters:
+      - $ref: '#/components/parameters/DeploymentId'
+      responses:
+        '200':
+          description: Deployment details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Deployment'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      security:
+      - bearerAuth: []
+  /deployments/{deploymentId}/start:
+    put:
+      operationId: startDeployment
+      tags:
+      - Deployments
+      summary: Start a deployment
+      description: Starts a stopped deployment. (Portal API.)
+      servers:
+      - url: https://portal-api.platform.quix.io
+      parameters:
+      - $ref: '#/components/parameters/DeploymentId'
+      responses:
+        '200':
+          description: Deployment starting.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      security:
+      - bearerAuth: []
+  /deployments/{deploymentId}/stop:
+    put:
+      operationId: stopDeployment
+      tags:
+      - Deployments
+      summary: Stop a deployment
+      description: Stops a running deployment. (Portal API.)
+      servers:
+      - url: https://portal-api.platform.quix.io
+      parameters:
+      - $ref: '#/components/parameters/DeploymentId'
+      responses:
+        '200':
+          description: Deployment stopping.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      security:
+      - bearerAuth: []
+components:
+  responses:
+    Unauthorized:
+      description: Authentication failed - the bearer token is missing, malformed, or expired.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  parameters:
+    DeploymentId:
+      name: deploymentId
+      in: path
+      required: true
+      description: The deployment identifier.
+      schema:
+        type: string
+  schemas:
+    Deployment:
+      type: object
+      properties:
+        deploymentId:
+          type: string
+        name:
+          type: string
+        workspaceId:
+          type: string
+        type:
+          type: string
+          enum:
+          - Service
+          - Job
+        status:
+          type: string
+          enum:
+          - Running
+          - Stopped
+          - Starting
+          - Stopping
+          - BuildFailed
+          - RuntimeError
+        replicas:
+          type: integer
+        cpuMillicores:
+          type: integer
+        memoryInMb:
+          type: integer
+    Error:
+      type: object
+      properties:
+        status:
+          type: integer
+        title:
+          type: string
+        detail:
+          type: string
+    CreateDeploymentRequest:
+      type: object
+      required:
+      - name
+      - workspaceId
+      properties:
+        name:
+          type: string
+        workspaceId:
+          type: string
+        applicationId:
+          type: string
+        type:
+          type: string
+          enum:
+          - Service
+          - Job
+        replicas:
+          type: integer
+        cpuMillicores:
+          type: integer
+        memoryInMb:
+          type: integer
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: PAT
+      description: 'Quix Personal Access Token (PAT) presented as `Authorization: Bearer <PAT>`. Generate from the Quix portal under your profile > Personal Access Tokens, or Settings > APIs and tokens.'
