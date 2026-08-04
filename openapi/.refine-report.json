@@ -1,0 +1,26 @@
+{
+  "provider": "quix",
+  "sources": [
+    "quix-definitions-api-openapi.yml",
+    "quix-deployments-api-openapi.yml",
+    "quix-event-data-api-openapi.yml",
+    "quix-parameter-data-api-openapi.yml",
+    "quix-streams-api-openapi.yml",
+    "quix-topics-api-openapi.yml",
+    "quix-workspaces-api-openapi.yml"
+  ],
+  "outputs": [
+    "quix-definitions-api-openapi.yml",
+    "quix-deployments-api-openapi.yml",
+    "quix-event-data-api-openapi.yml",
+    "quix-parameter-data-api-openapi.yml",
+    "quix-streams-api-openapi.yml",
+    "quix-topics-api-openapi.yml",
+    "quix-workspaces-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}
