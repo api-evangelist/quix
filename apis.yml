@@ -30,7 +30,7 @@ tags:
 - Streaming Data
 created: '2026-06-21'
 modified: '2026-06-21'
-specificationVersion: '0.19'
+specificationVersion: '0.23'
 apis:
 - aid: quix:streaming-reader-api
   name: Quix Streaming Reader API (Real-time)
