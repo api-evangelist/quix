@@ -1,0 +1,871 @@
+{
+  "item": [
+    {
+      "id": "e7a02a6a-4c44-46fe-a91e-b91643a6733b",
+      "name": "Deployments",
+      "description": {
+        "content": "Manage and monitor service deployments (Portal API).",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "76a26984-9635-490a-9da4-d82d5abf1166",
+          "name": "List deployments",
+          "request": {
+            "name": "List deployments",
+            "description": {
+              "content": "Returns the service deployments in a workspace. (Portal API.) The workspace is typically supplied as a `workspaceId` query parameter.",
+              "type": "text/plain"
+            },
+            "url": {
+              "protocol": "https",
+              "path": [
+                "deployments"
+              ],
+              "host": [
+                "portal-api",
+                "platform",
+                "quix",
+                "io"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "workspaceId",
+                  "value": "<string>",
+                  "description": "(Required) "
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "20d2da7b-f4a6-48c7-8591-793609342f3a",
+              "name": "A list of deployments.",
+              "originalRequest": {
+                "url": {
+                  "protocol": "https",
+                  "path": [
+                    "deployments"
+                  ],
+                  "host": [
+                    "portal-api",
+                    "platform",
+                    "quix",
+                    "io"
+                  ],
+                  "query": [
+                    {
+                      "key": "workspaceId",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"deploymentId\": \"string\",\n    \"name\": \"string\",\n    \"workspaceId\": \"string\",\n    \"type\": \"Job\",\n    \"status\": \"BuildFailed\",\n    \"replicas\": 1484,\n    \"cpuMillicores\": 4973,\n    \"memoryInMb\": 3255\n  },\n  {\n    \"deploymentId\": \"string\",\n    \"name\": \"string\",\n    \"workspaceId\": \"string\",\n    \"type\": \"Service\",\n    \"status\": \"BuildFailed\",\n    \"replicas\": 4700,\n    \"cpuMillicores\": 8362,\n    \"memoryInMb\": 9052\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5885c2f2-7afa-4375-985c-b156b16ec91e",
+              "name": "Authentication failed - the bearer token is missing, malformed, or expired.",
+              "originalRequest": {
+                "url": {
+                  "protocol": "https",
+                  "path": [
+                    "deployments"
+                  ],
+                  "host": [
+                    "portal-api",
+                    "platform",
+                    "quix",
+                    "io"
+                  ],
+                  "query": [
+                    {
+                      "key": "workspaceId",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": 93,\n  \"title\": \"string\",\n  \"detail\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "daeaeebd-bd8e-46e2-8595-0f305d5d4ac5",
+          "name": "Create a deployment",
+          "request": {
+            "name": "Create a deployment",
+            "description": {
+              "content": "Creates a service or job deployment from a project/application in a workspace. (Portal API.)",
+              "type": "text/plain"
+            },
+            "url": {
+              "protocol": "https",
+              "path": [
+                "deployments"
+              ],
+              "host": [
+                "portal-api",
+                "platform",
+                "quix",
+                "io"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"workspaceId\": \"<string>\",\n  \"applicationId\": \"<string>\",\n  \"type\": \"<string>\",\n  \"replicas\": \"<integer>\",\n  \"cpuMillicores\": \"<integer>\",\n  \"memoryInMb\": \"<integer>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "fb2e7d4c-2bd8-46e5-8164-d298512457c7",
+              "name": "Deployment created.",
+              "originalRequest": {
+                "url": {
+                  "protocol": "https",
+                  "path": [
+                    "deployments"
+                  ],
+                  "host": [
+                    "portal-api",
+                    "platform",
+                    "quix",
+                    "io"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"workspaceId\": \"<string>\",\n  \"applicationId\": \"<string>\",\n  \"type\": \"<string>\",\n  \"replicas\": \"<integer>\",\n  \"cpuMillicores\": \"<integer>\",\n  \"memoryInMb\": \"<integer>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"deploymentId\": \"string\",\n  \"name\": \"string\",\n  \"workspaceId\": \"string\",\n  \"type\": \"Service\",\n  \"status\": \"Starting\",\n  \"replicas\": 8223,\n  \"cpuMillicores\": 4124,\n  \"memoryInMb\": 5093\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "44430c38-0a2a-4355-9907-05cfdafdee2f",
+              "name": "Authentication failed - the bearer token is missing, malformed, or expired.",
+              "originalRequest": {
+                "url": {
+                  "protocol": "https",
+                  "path": [
+                    "deployments"
+                  ],
+                  "host": [
+                    "portal-api",
+                    "platform",
+                    "quix",
+                    "io"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"workspaceId\": \"<string>\",\n  \"applicationId\": \"<string>\",\n  \"type\": \"<string>\",\n  \"replicas\": \"<integer>\",\n  \"cpuMillicores\": \"<integer>\",\n  \"memoryInMb\": \"<integer>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": 93,\n  \"title\": \"string\",\n  \"detail\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "ecdd03a7-89c1-4b9d-8440-810f78c74ce1",
+          "name": "Get a deployment",
+          "request": {
+            "name": "Get a deployment",
+            "description": {
+              "content": "Returns details and status for a single deployment. (Portal API.)",
+              "type": "text/plain"
+            },
+            "url": {
+              "protocol": "https",
+              "path": [
+                "deployments",
+                ":deploymentId"
+              ],
+              "host": [
+                "portal-api",
+                "platform",
+                "quix",
+                "io"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "deploymentId",
+                  "description": "(Required) The deployment identifier."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "0caa2e4e-6385-42fa-ad97-41098d71b322",
+              "name": "Deployment details.",
+              "originalRequest": {
+                "url": {
+                  "protocol": "https",
+                  "path": [
+                    "deployments",
+                    ":deploymentId"
+                  ],
+                  "host": [
+                    "portal-api",
+                    "platform",
+                    "quix",
+                    "io"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "deploymentId",
+                      "description": "(Required) The deployment identifier."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"deploymentId\": \"string\",\n  \"name\": \"string\",\n  \"workspaceId\": \"string\",\n  \"type\": \"Service\",\n  \"status\": \"Starting\",\n  \"replicas\": 8223,\n  \"cpuMillicores\": 4124,\n  \"memoryInMb\": 5093\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7c568c9b-9242-489b-b831-28e56d448c0e",
+              "name": "Authentication failed - the bearer token is missing, malformed, or expired.",
+              "originalRequest": {
+                "url": {
+                  "protocol": "https",
+                  "path": [
+                    "deployments",
+                    ":deploymentId"
+                  ],
+                  "host": [
+                    "portal-api",
+                    "platform",
+                    "quix",
+                    "io"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "deploymentId",
+                      "description": "(Required) The deployment identifier."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": 93,\n  \"title\": \"string\",\n  \"detail\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "0dfae5ee-e1ca-4b77-935a-d93ede28c1d1",
+          "name": "Start a deployment",
+          "request": {
+            "name": "Start a deployment",
+            "description": {
+              "content": "Starts a stopped deployment. (Portal API.)",
+              "type": "text/plain"
+            },
+            "url": {
+              "protocol": "https",
+              "path": [
+                "deployments",
+                ":deploymentId",
+                "start"
+              ],
+              "host": [
+                "portal-api",
+                "platform",
+                "quix",
+                "io"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "deploymentId",
+                  "description": "(Required) The deployment identifier."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "018a2324-dc2a-4e64-b161-fbecbf7ea040",
+              "name": "Deployment starting.",
+              "originalRequest": {
+                "url": {
+                  "protocol": "https",
+                  "path": [
+                    "deployments",
+                    ":deploymentId",
+                    "start"
+                  ],
+                  "host": [
+                    "portal-api",
+                    "platform",
+                    "quix",
+                    "io"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "deploymentId",
+                      "description": "(Required) The deployment identifier."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "c2d7c703-0b2a-4997-87a6-521756e946e6",
+              "name": "Authentication failed - the bearer token is missing, malformed, or expired.",
+              "originalRequest": {
+                "url": {
+                  "protocol": "https",
+                  "path": [
+                    "deployments",
+                    ":deploymentId",
+                    "start"
+                  ],
+                  "host": [
+                    "portal-api",
+                    "platform",
+                    "quix",
+                    "io"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "deploymentId",
+                      "description": "(Required) The deployment identifier."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": 93,\n  \"title\": \"string\",\n  \"detail\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "c7c23c3e-c736-4251-ba12-d035366e786d",
+          "name": "Stop a deployment",
+          "request": {
+            "name": "Stop a deployment",
+            "description": {
+              "content": "Stops a running deployment. (Portal API.)",
+              "type": "text/plain"
+            },
+            "url": {
+              "protocol": "https",
+              "path": [
+                "deployments",
+                ":deploymentId",
+                "stop"
+              ],
+              "host": [
+                "portal-api",
+                "platform",
+                "quix",
+                "io"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "deploymentId",
+                  "description": "(Required) The deployment identifier."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "e4c4b261-9469-404a-8e2b-e2279776ae75",
+              "name": "Deployment stopping.",
+              "originalRequest": {
+                "url": {
+                  "protocol": "https",
+                  "path": [
+                    "deployments",
+                    ":deploymentId",
+                    "stop"
+                  ],
+                  "host": [
+                    "portal-api",
+                    "platform",
+                    "quix",
+                    "io"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "deploymentId",
+                      "description": "(Required) The deployment identifier."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "9712a0b8-006d-4b24-a5bd-f48c7a99ae15",
+              "name": "Authentication failed - the bearer token is missing, malformed, or expired.",
+              "originalRequest": {
+                "url": {
+                  "protocol": "https",
+                  "path": [
+                    "deployments",
+                    ":deploymentId",
+                    "stop"
+                  ],
+                  "host": [
+                    "portal-api",
+                    "platform",
+                    "quix",
+                    "io"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "deploymentId",
+                      "description": "(Required) The deployment identifier."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": 93,\n  \"title\": \"string\",\n  \"detail\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "description": {
+        "content": "Quix environment (workspace) identifier.",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "myorg-myproject-production",
+      "key": "environmentId"
+    },
+    {
+      "type": "string",
+      "value": "https://writer-{{environmentId}}.cloud.quix.io",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "3ff3ec49-201b-4b9d-a608-5f73d52ff95c",
+    "name": "Quix Cloud HTTP APIs Definitions Deployments API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "OpenAPI 3.0 description of the HTTP (REST) surfaces of Quix Cloud: the Streaming Writer API for publishing time-series parameter data, events, and definitions into Quix topics, and the account-wide Portal API for managing workspaces, topics, and deployments.\n\nThe Streaming Reader API is delivered exclusively over a Microsoft SignalR hub (WebSockets / Long Polling) and is therefore modeled separately in the companion AsyncAPI document at asyncapi/quix-asyncapi.yml, not here.\n\nAll endpoints authenticate with a Quix Personal Access Token (PAT) supplied as an `Authorization: Bearer <PAT>` header. The Streaming Writer API base host is environment-specific (`writer-{environmentId}.cloud.quix.io`); the Portal API is account-wide (`portal-api.platform.quix.io`). Endpoint paths are documented by Quix; per-environment Swagger/OpenAPI references are available from the Quix portal under Settings > APIs and tokens.\n\nContact Support:\n Name: Quix Support",
+      "type": "text/plain"
+    }
+  }
+}

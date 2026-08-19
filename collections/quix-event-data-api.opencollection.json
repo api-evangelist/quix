@@ -1,0 +1,51 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Quix Cloud HTTP APIs Definitions Event Data API",
+    "version": "1.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Event Data",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Send event data",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://writer-{environmentId}.cloud.quix.io/topics/:topicName/streams/:streamId/events/data",
+            "params": [
+              {
+                "name": "topicName",
+                "value": "",
+                "type": "path",
+                "description": "The name of the topic the stream belongs to."
+              },
+              {
+                "name": "streamId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the stream. Publishing to an id that does not exist creates the stream implicitly."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Publishes one or more discrete events to a stream. Each event carries a nanosecond `timestamp`, an `id`, an optional `value`, and optional `tags`."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

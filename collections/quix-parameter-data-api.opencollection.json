@@ -1,0 +1,51 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Quix Cloud HTTP APIs Definitions Parameter Data API",
+    "version": "1.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Parameter Data",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Send parameter data",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://writer-{environmentId}.cloud.quix.io/topics/:topicName/streams/:streamId/parameters/data",
+            "params": [
+              {
+                "name": "topicName",
+                "value": "",
+                "type": "path",
+                "description": "The name of the topic the stream belongs to."
+              },
+              {
+                "name": "streamId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the stream. Publishing to an id that does not exist creates the stream implicitly."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Publishes one or more time-series parameter samples to a stream. The payload carries an array of nanosecond `timestamps` plus values keyed by parameter name under `numericValues`, `stringValues`, and/or `binaryValues`. Publishing to a non-existent `streamId` implicitly creates the stream."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

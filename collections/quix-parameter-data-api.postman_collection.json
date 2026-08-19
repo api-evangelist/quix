@@ -1,0 +1,276 @@
+{
+  "item": [
+    {
+      "id": "05727a73-09b0-4b28-a7ad-c821521f0248",
+      "name": "Parameter Data",
+      "description": {
+        "content": "Publish time-series parameter data into a stream (Streaming Writer API).",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "10efc806-a9f1-4f13-a9a6-9597b29c48b7",
+          "name": "Send parameter data",
+          "request": {
+            "name": "Send parameter data",
+            "description": {
+              "content": "Publishes one or more time-series parameter samples to a stream. The payload carries an array of nanosecond `timestamps` plus values keyed by parameter name under `numericValues`, `stringValues`, and/or `binaryValues`. Publishing to a non-existent `streamId` implicitly creates the stream.",
+              "type": "text/plain"
+            },
+            "url": {
+              "protocol": "https",
+              "path": [
+                "topics",
+                ":topicName",
+                "streams",
+                ":streamId",
+                "parameters",
+                "data"
+              ],
+              "host": [
+                "writer-{{environmentId}}",
+                "cloud",
+                "quix",
+                "io"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "topicName",
+                  "description": "(Required) The name of the topic the stream belongs to."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "streamId",
+                  "description": "(Required) The unique identifier of the stream. Publishing to an id that does not exist creates the stream implicitly."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"timestamps\": [\n    \"<long>\",\n    \"<long>\"\n  ],\n  \"numericValues\": {\n    \"key_0\": [\n      \"<number>\",\n      \"<number>\"\n    ],\n    \"key_1\": [\n      \"<number>\",\n      \"<number>\"\n    ]\n  },\n  \"stringValues\": {\n    \"key_0\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"key_1\": [\n      \"<string>\",\n      \"<string>\"\n    ]\n  },\n  \"binaryValues\": {\n    \"key_0\": [\n      \"<byte>\",\n      \"<byte>\"\n    ],\n    \"key_1\": [\n      \"<byte>\",\n      \"<byte>\"\n    ],\n    \"key_2\": [\n      \"<byte>\",\n      \"<byte>\"\n    ]\n  },\n  \"tagValues\": {\n    \"key_0\": [\n      \"<string>\",\n      \"<string>\"\n    ]\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "4f00c268-5de5-4aa7-b70b-c22bf7cb559c",
+              "name": "Data accepted.",
+              "originalRequest": {
+                "url": {
+                  "protocol": "https",
+                  "path": [
+                    "topics",
+                    ":topicName",
+                    "streams",
+                    ":streamId",
+                    "parameters",
+                    "data"
+                  ],
+                  "host": [
+                    "writer-{{environmentId}}",
+                    "cloud",
+                    "quix",
+                    "io"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "topicName",
+                      "description": "(Required) The name of the topic the stream belongs to."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "streamId",
+                      "description": "(Required) The unique identifier of the stream. Publishing to an id that does not exist creates the stream implicitly."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"timestamps\": [\n    \"<long>\",\n    \"<long>\"\n  ],\n  \"numericValues\": {\n    \"key_0\": [\n      \"<number>\",\n      \"<number>\"\n    ]\n  },\n  \"stringValues\": {\n    \"key_0\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"key_1\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"key_2\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"key_3\": [\n      \"<string>\",\n      \"<string>\"\n    ]\n  },\n  \"binaryValues\": {\n    \"key_0\": [\n      \"<byte>\",\n      \"<byte>\"\n    ]\n  },\n  \"tagValues\": {\n    \"key_0\": [\n      \"<string>\",\n      \"<string>\"\n    ]\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "699c5649-2034-4e4d-89a7-d950ab773f6e",
+              "name": "Authentication failed - the bearer token is missing, malformed, or expired.",
+              "originalRequest": {
+                "url": {
+                  "protocol": "https",
+                  "path": [
+                    "topics",
+                    ":topicName",
+                    "streams",
+                    ":streamId",
+                    "parameters",
+                    "data"
+                  ],
+                  "host": [
+                    "writer-{{environmentId}}",
+                    "cloud",
+                    "quix",
+                    "io"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "topicName",
+                      "description": "(Required) The name of the topic the stream belongs to."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "streamId",
+                      "description": "(Required) The unique identifier of the stream. Publishing to an id that does not exist creates the stream implicitly."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"timestamps\": [\n    \"<long>\",\n    \"<long>\"\n  ],\n  \"numericValues\": {\n    \"key_0\": [\n      \"<number>\",\n      \"<number>\"\n    ]\n  },\n  \"stringValues\": {\n    \"key_0\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"key_1\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"key_2\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"key_3\": [\n      \"<string>\",\n      \"<string>\"\n    ]\n  },\n  \"binaryValues\": {\n    \"key_0\": [\n      \"<byte>\",\n      \"<byte>\"\n    ]\n  },\n  \"tagValues\": {\n    \"key_0\": [\n      \"<string>\",\n      \"<string>\"\n    ]\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": 2022,\n  \"title\": \"string\",\n  \"detail\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "description": {
+        "content": "Quix environment (workspace) identifier.",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "myorg-myproject-production",
+      "key": "environmentId"
+    },
+    {
+      "type": "string",
+      "value": "https://writer-{{environmentId}}.cloud.quix.io",
+      "key": "baseUrl"
+    },
+    {
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "myorg-myproject-production",
+      "key": "environmentId"
+    }
+  ],
+  "info": {
+    "_postman_id": "484e830c-7613-4ccf-b5a2-f4f434fb2c9d",
+    "name": "Quix Cloud HTTP APIs Definitions Parameter Data API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "OpenAPI 3.0 description of the HTTP (REST) surfaces of Quix Cloud: the Streaming Writer API for publishing time-series parameter data, events, and definitions into Quix topics, and the account-wide Portal API for managing workspaces, topics, and deployments.\n\nThe Streaming Reader API is delivered exclusively over a Microsoft SignalR hub (WebSockets / Long Polling) and is therefore modeled separately in the companion AsyncAPI document at asyncapi/quix-asyncapi.yml, not here.\n\nAll endpoints authenticate with a Quix Personal Access Token (PAT) supplied as an `Authorization: Bearer <PAT>` header. The Streaming Writer API base host is environment-specific (`writer-{environmentId}.cloud.quix.io`); the Portal API is account-wide (`portal-api.platform.quix.io`). Endpoint paths are documented by Quix; per-environment Swagger/OpenAPI references are available from the Quix portal under Settings > APIs and tokens.\n\nContact Support:\n Name: Quix Support",
+      "type": "text/plain"
+    }
+  }
+}

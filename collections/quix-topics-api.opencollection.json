@@ -1,0 +1,82 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Quix Cloud HTTP APIs Definitions Topics API",
+    "version": "1.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Topics",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List topics",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://writer-{environmentId}.cloud.quix.io/topics",
+            "params": [
+              {
+                "name": "workspaceId",
+                "value": "",
+                "type": "query",
+                "description": "The workspace the topics belong to."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns Kafka topics for a workspace. (Portal API.) The workspace is typically supplied as a `workspaceId` query parameter."
+        },
+        {
+          "info": {
+            "name": "Create a topic",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://writer-{environmentId}.cloud.quix.io/topics",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Creates a new Kafka topic in a workspace. (Portal API.)"
+        },
+        {
+          "info": {
+            "name": "Delete a topic",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://writer-{environmentId}.cloud.quix.io/topics/:topicId",
+            "params": [
+              {
+                "name": "topicId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Deletes a Kafka topic from a workspace. (Portal API.)"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

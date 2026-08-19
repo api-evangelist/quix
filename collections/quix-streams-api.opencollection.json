@@ -1,0 +1,78 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Quix Cloud HTTP APIs Definitions Streams API",
+    "version": "1.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Streams",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create a new stream",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://writer-{environmentId}.cloud.quix.io/topics/:topicName/streams",
+            "params": [
+              {
+                "name": "topicName",
+                "value": "",
+                "type": "path",
+                "description": "The name of the topic the stream belongs to."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Creates a new stream within the given topic. Returns the unique `streamId`. A stream can also be created implicitly by publishing data to a `streamId` that does not yet exist, removing the need to call this endpoint explicitly."
+        },
+        {
+          "info": {
+            "name": "Close a stream",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://writer-{environmentId}.cloud.quix.io/topics/:topicName/streams/:streamId/close",
+            "params": [
+              {
+                "name": "topicName",
+                "value": "",
+                "type": "path",
+                "description": "The name of the topic the stream belongs to."
+              },
+              {
+                "name": "streamId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the stream. Publishing to an id that does not exist creates the stream implicitly."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Marks a stream as closed, signaling to consumers that no further data will be published. An optional end state (e.g. Closed, Aborted, Terminated) may be supplied."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
