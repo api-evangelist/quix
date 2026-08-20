@@ -24,6 +24,12 @@ accessModel:
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/quix.png
 tags:
 - Stream Processing
+- Real-Time
+- Kafka
+- Python
+- Streaming Data
+tags_raw:
+- Stream Processing
 - Real Time
 - Kafka
 - Python
@@ -35,6 +41,12 @@ apis:
 - aid: quix:streaming-reader-api
   name: Quix Streaming Reader API (Real-time)
   tags:
+  - Streaming
+  - Reader
+  - Real-Time
+  - SignalR
+  - WebSocket
+  tags_raw:
   - Streaming
   - Reader
   - Real Time
@@ -55,6 +67,11 @@ apis:
 - aid: quix:quix-streams-oss
   name: Quix Streams (Open Source)
   tags:
+  - Open-Source
+  - Python
+  - Kafka
+  - Library
+  tags_raw:
   - Open Source
   - Python
   - Kafka
@@ -92,6 +109,8 @@ apis:
   humanURL: https://quix.io/docs/quix-cloud/apis/streaming-writer-api/overview.html
   baseURL: https://writer-{environmentId}.cloud.quix.io
   tags:
+  - Deployment
+  tags_raw:
   - Deployments
   properties:
   - type: OpenAPI
