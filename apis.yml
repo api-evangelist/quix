@@ -8,6 +8,19 @@ description: Quix is a Python-native stream-processing platform for real-time da
   Cloud, a fully managed platform offering managed Kafka, Kubernetes deployments,
   and a set of HTTP and SignalR/WebSocket APIs for writing data in, reading data out
   in real time, and managing workspaces, topics, and deployments.
+deliveryModel:
+  model: unknown
+  open_source: unknown
+  commercial: true
+  callable_host: true
+  label: Delivery model not determined — needs a product licence on record
+  confidence: low
+  source:
+  - openapi
+  - pricing
+  - repository-unlicensed
+  generated: '2026-08-28'
+  method: derived
 accessModel:
   pricing: freemium
   onboarding: open
