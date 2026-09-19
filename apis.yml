@@ -180,6 +180,8 @@ apis:
   humanURL: https://quix.io/docs/quix-cloud/apis/streaming-writer-api/overview.html
   baseURL: https://writer-{environmentId}.cloud.quix.io
   tags:
+  - Topic
+  tags_raw:
   - Topics
   properties:
   - type: OpenAPI
@@ -194,6 +196,8 @@ apis:
   humanURL: https://quix.io/docs/quix-cloud/apis/streaming-writer-api/overview.html
   baseURL: https://writer-{environmentId}.cloud.quix.io
   tags:
+  - Workspace
+  tags_raw:
   - Workspaces
   properties:
   - type: OpenAPI
