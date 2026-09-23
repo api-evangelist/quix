@@ -1,13 +1,7 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
-  title: Quix Cloud HTTP APIs Definitions Deployments API
-  description: 'OpenAPI 3.0 description of the HTTP (REST) surfaces of Quix Cloud: the Streaming Writer API for publishing time-series parameter data, events, and definitions into Quix topics, and the account-wide Portal API for managing workspaces, topics, and deployments.
-
-
-    The Streaming Reader API is delivered exclusively over a Microsoft SignalR hub (WebSockets / Long Polling) and is therefore modeled separately in the companion AsyncAPI document at asyncapi/quix-asyncapi.yml, not here.
-
-
-    All endpoints authenticate with a Quix Personal Access Token (PAT) supplied as an `Authorization: Bearer <PAT>` header. The Streaming Writer API base host is environment-specific (`writer-{environmentId}.cloud.quix.io`); the Portal API is account-wide (`portal-api.platform.quix.io`). Endpoint paths are documented by Quix; per-environment Swagger/OpenAPI references are available from the Quix portal under Settings > APIs and tokens.'
+  title: Quix Cloud HTTP Deployments API
+  description: 'OpenAPI 3.0 description of the HTTP (REST) surfaces of Quix Cloud: the Streaming Writer API for publishing time-series parameter data, events, and definitions into Quix topics, and the account-wide Portal API for managing workspaces, topics, and deployments.'
   termsOfService: https://quix.io/terms/
   contact:
     name: Quix Support
@@ -148,14 +142,6 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-  parameters:
-    DeploymentId:
-      name: deploymentId
-      in: path
-      required: true
-      description: The deployment identifier.
-      schema:
-        type: string
   schemas:
     Deployment:
       type: object
@@ -218,6 +204,14 @@ components:
           type: integer
         memoryInMb:
           type: integer
+  parameters:
+    DeploymentId:
+      name: deploymentId
+      in: path
+      required: true
+      description: The deployment identifier.
+      schema:
+        type: string
   securitySchemes:
     bearerAuth:
       type: http

@@ -1,13 +1,7 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
-  title: Quix Cloud HTTP APIs Definitions Workspaces API
-  description: 'OpenAPI 3.0 description of the HTTP (REST) surfaces of Quix Cloud: the Streaming Writer API for publishing time-series parameter data, events, and definitions into Quix topics, and the account-wide Portal API for managing workspaces, topics, and deployments.
-
-
-    The Streaming Reader API is delivered exclusively over a Microsoft SignalR hub (WebSockets / Long Polling) and is therefore modeled separately in the companion AsyncAPI document at asyncapi/quix-asyncapi.yml, not here.
-
-
-    All endpoints authenticate with a Quix Personal Access Token (PAT) supplied as an `Authorization: Bearer <PAT>` header. The Streaming Writer API base host is environment-specific (`writer-{environmentId}.cloud.quix.io`); the Portal API is account-wide (`portal-api.platform.quix.io`). Endpoint paths are documented by Quix; per-environment Swagger/OpenAPI references are available from the Quix portal under Settings > APIs and tokens.'
+  title: Quix Cloud HTTP Workspaces API
+  description: 'OpenAPI 3.0 description of the HTTP (REST) surfaces of Quix Cloud: the Streaming Writer API for publishing time-series parameter data, events, and definitions into Quix topics, and the account-wide Portal API for managing workspaces, topics, and deployments.'
   termsOfService: https://quix.io/terms/
   contact:
     name: Quix Support
@@ -74,14 +68,16 @@ paths:
       security:
       - bearerAuth: []
 components:
-  responses:
-    Unauthorized:
-      description: Authentication failed - the bearer token is missing, malformed, or expired.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   schemas:
+    Error:
+      type: object
+      properties:
+        status:
+          type: integer
+        title:
+          type: string
+        detail:
+          type: string
     Workspace:
       type: object
       properties:
@@ -94,15 +90,6 @@ components:
         broker:
           type: string
           description: Managed Kafka broker type for the workspace.
-    Error:
-      type: object
-      properties:
-        status:
-          type: integer
-        title:
-          type: string
-        detail:
-          type: string
   parameters:
     WorkspaceId:
       name: workspaceId
@@ -111,6 +98,13 @@ components:
       description: The workspace (environment) identifier.
       schema:
         type: string
+  responses:
+    Unauthorized:
+      description: Authentication failed - the bearer token is missing, malformed, or expired.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   securitySchemes:
     bearerAuth:
       type: http

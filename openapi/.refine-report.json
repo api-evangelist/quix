@@ -1,13 +1,7 @@
 {
   "provider": "quix",
   "sources": [
-    "quix-definitions-api-openapi.yml",
-    "quix-deployments-api-openapi.yml",
-    "quix-event-data-api-openapi.yml",
-    "quix-parameter-data-api-openapi.yml",
-    "quix-streams-api-openapi.yml",
-    "quix-topics-api-openapi.yml",
-    "quix-workspaces-api-openapi.yml"
+    "_original/quix-openapi.yml"
   ],
   "outputs": [
     "quix-definitions-api-openapi.yml",
@@ -21,6 +15,18 @@
   "archived": [],
   "errors": [],
   "warnings": [],
-  "notes": [],
-  "skipped": []
+  "notes": [
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "quix-openapi.yml: upgraded openapi 3.0.1 -> OpenAPI 3.2.0",
+    "apis.yml register: already-registered"
+  ],
+  "skipped": [
+    "quix-definitions-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "quix-deployments-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "quix-event-data-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "quix-parameter-data-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "quix-streams-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "quix-topics-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "quix-workspaces-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
 }
