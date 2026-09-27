@@ -101,6 +101,22 @@ paths:
       - bearerAuth: []
 components:
   schemas:
+    CreateTopicRequest:
+      type: object
+      required:
+      - name
+      - workspaceId
+      properties:
+        name:
+          type: string
+        workspaceId:
+          type: string
+        partitions:
+          type: integer
+        retentionInMinutes:
+          type: integer
+        retentionInBytes:
+          type: integer
     Error:
       type: object
       properties:
@@ -120,22 +136,6 @@ components:
         workspaceId:
           type: string
         status:
-          type: string
-        partitions:
-          type: integer
-        retentionInMinutes:
-          type: integer
-        retentionInBytes:
-          type: integer
-    CreateTopicRequest:
-      type: object
-      required:
-      - name
-      - workspaceId
-      properties:
-        name:
-          type: string
-        workspaceId:
           type: string
         partitions:
           type: integer

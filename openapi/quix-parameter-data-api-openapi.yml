@@ -52,21 +52,7 @@ paths:
       security:
       - bearerAuth: []
 components:
-  responses:
-    Unauthorized:
-      description: Authentication failed - the bearer token is missing, malformed, or expired.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   parameters:
-    StreamId:
-      name: streamId
-      in: path
-      required: true
-      description: The unique identifier of the stream. Publishing to an id that does not exist creates the stream implicitly.
-      schema:
-        type: string
     TopicName:
       name: topicName
       in: path
@@ -74,7 +60,23 @@ components:
       description: The name of the topic the stream belongs to.
       schema:
         type: string
+    StreamId:
+      name: streamId
+      in: path
+      required: true
+      description: The unique identifier of the stream. Publishing to an id that does not exist creates the stream implicitly.
+      schema:
+        type: string
   schemas:
+    Error:
+      type: object
+      properties:
+        status:
+          type: integer
+        title:
+          type: string
+        detail:
+          type: string
     ParameterDataRequest:
       type: object
       required:
@@ -130,15 +132,13 @@ components:
           - 400.04
           - 50.05
           - 60.06
-    Error:
-      type: object
-      properties:
-        status:
-          type: integer
-        title:
-          type: string
-        detail:
-          type: string
+  responses:
+    Unauthorized:
+      description: Authentication failed - the bearer token is missing, malformed, or expired.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   securitySchemes:
     bearerAuth:
       type: http
