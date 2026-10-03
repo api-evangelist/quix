@@ -52,6 +52,13 @@ paths:
       security:
       - bearerAuth: []
 components:
+  responses:
+    Unauthorized:
+      description: Authentication failed - the bearer token is missing, malformed, or expired.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   parameters:
     TopicName:
       name: topicName
@@ -132,13 +139,6 @@ components:
           - 400.04
           - 50.05
           - 60.06
-  responses:
-    Unauthorized:
-      description: Authentication failed - the bearer token is missing, malformed, or expired.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   securitySchemes:
     bearerAuth:
       type: http

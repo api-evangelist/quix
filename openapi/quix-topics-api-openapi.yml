@@ -101,6 +101,15 @@ paths:
       - bearerAuth: []
 components:
   schemas:
+    Error:
+      type: object
+      properties:
+        status:
+          type: integer
+        title:
+          type: string
+        detail:
+          type: string
     CreateTopicRequest:
       type: object
       required:
@@ -117,15 +126,6 @@ components:
           type: integer
         retentionInBytes:
           type: integer
-    Error:
-      type: object
-      properties:
-        status:
-          type: integer
-        title:
-          type: string
-        detail:
-          type: string
     Topic:
       type: object
       properties:
