@@ -68,24 +68,7 @@ paths:
       security:
       - bearerAuth: []
 components:
-  parameters:
-    WorkspaceId:
-      name: workspaceId
-      in: path
-      required: true
-      description: The workspace (environment) identifier.
-      schema:
-        type: string
   schemas:
-    Error:
-      type: object
-      properties:
-        status:
-          type: integer
-        title:
-          type: string
-        detail:
-          type: string
     Workspace:
       type: object
       properties:
@@ -98,6 +81,15 @@ components:
         broker:
           type: string
           description: Managed Kafka broker type for the workspace.
+    Error:
+      type: object
+      properties:
+        status:
+          type: integer
+        title:
+          type: string
+        detail:
+          type: string
   responses:
     Unauthorized:
       description: Authentication failed - the bearer token is missing, malformed, or expired.
@@ -105,6 +97,14 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
+  parameters:
+    WorkspaceId:
+      name: workspaceId
+      in: path
+      required: true
+      description: The workspace (environment) identifier.
+      schema:
+        type: string
   securitySchemes:
     bearerAuth:
       type: http

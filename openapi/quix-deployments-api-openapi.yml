@@ -135,21 +135,6 @@ paths:
       security:
       - bearerAuth: []
 components:
-  parameters:
-    DeploymentId:
-      name: deploymentId
-      in: path
-      required: true
-      description: The deployment identifier.
-      schema:
-        type: string
-  responses:
-    Unauthorized:
-      description: Authentication failed - the bearer token is missing, malformed, or expired.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   schemas:
     Deployment:
       type: object
@@ -180,15 +165,6 @@ components:
           type: integer
         memoryInMb:
           type: integer
-    Error:
-      type: object
-      properties:
-        status:
-          type: integer
-        title:
-          type: string
-        detail:
-          type: string
     CreateDeploymentRequest:
       type: object
       required:
@@ -212,6 +188,30 @@ components:
           type: integer
         memoryInMb:
           type: integer
+    Error:
+      type: object
+      properties:
+        status:
+          type: integer
+        title:
+          type: string
+        detail:
+          type: string
+  parameters:
+    DeploymentId:
+      name: deploymentId
+      in: path
+      required: true
+      description: The deployment identifier.
+      schema:
+        type: string
+  responses:
+    Unauthorized:
+      description: Authentication failed - the bearer token is missing, malformed, or expired.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   securitySchemes:
     bearerAuth:
       type: http

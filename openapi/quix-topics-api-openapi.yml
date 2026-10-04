@@ -100,32 +100,14 @@ paths:
       security:
       - bearerAuth: []
 components:
+  responses:
+    Unauthorized:
+      description: Authentication failed - the bearer token is missing, malformed, or expired.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   schemas:
-    Error:
-      type: object
-      properties:
-        status:
-          type: integer
-        title:
-          type: string
-        detail:
-          type: string
-    CreateTopicRequest:
-      type: object
-      required:
-      - name
-      - workspaceId
-      properties:
-        name:
-          type: string
-        workspaceId:
-          type: string
-        partitions:
-          type: integer
-        retentionInMinutes:
-          type: integer
-        retentionInBytes:
-          type: integer
     Topic:
       type: object
       properties:
@@ -143,13 +125,31 @@ components:
           type: integer
         retentionInBytes:
           type: integer
-  responses:
-    Unauthorized:
-      description: Authentication failed - the bearer token is missing, malformed, or expired.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
+    CreateTopicRequest:
+      type: object
+      required:
+      - name
+      - workspaceId
+      properties:
+        name:
+          type: string
+        workspaceId:
+          type: string
+        partitions:
+          type: integer
+        retentionInMinutes:
+          type: integer
+        retentionInBytes:
+          type: integer
+    Error:
+      type: object
+      properties:
+        status:
+          type: integer
+        title:
+          type: string
+        detail:
+          type: string
   securitySchemes:
     bearerAuth:
       type: http
