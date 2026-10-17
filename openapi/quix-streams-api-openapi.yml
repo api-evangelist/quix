@@ -84,13 +84,6 @@ paths:
       - bearerAuth: []
 components:
   parameters:
-    TopicName:
-      name: topicName
-      in: path
-      required: true
-      description: The name of the topic the stream belongs to.
-      schema:
-        type: string
     StreamId:
       name: streamId
       in: path
@@ -98,7 +91,23 @@ components:
       description: The unique identifier of the stream. Publishing to an id that does not exist creates the stream implicitly.
       schema:
         type: string
+    TopicName:
+      name: topicName
+      in: path
+      required: true
+      description: The name of the topic the stream belongs to.
+      schema:
+        type: string
   schemas:
+    Error:
+      type: object
+      properties:
+        status:
+          type: integer
+        title:
+          type: string
+        detail:
+          type: string
     CreateStreamRequest:
       type: object
       description: Optional metadata for the new stream.
@@ -119,6 +128,14 @@ components:
           items:
             type: string
           description: Parent stream ids for derived streams.
+    CreateStreamResponse:
+      type: object
+      required:
+      - streamId
+      properties:
+        streamId:
+          type: string
+          description: The unique identifier of the newly created stream.
     CloseStreamRequest:
       type: object
       properties:
@@ -129,23 +146,6 @@ components:
           - Aborted
           - Terminated
           description: The terminal state of the stream.
-    CreateStreamResponse:
-      type: object
-      required:
-      - streamId
-      properties:
-        streamId:
-          type: string
-          description: The unique identifier of the newly created stream.
-    Error:
-      type: object
-      properties:
-        status:
-          type: integer
-        title:
-          type: string
-        detail:
-          type: string
   responses:
     Unauthorized:
       description: Authentication failed - the bearer token is missing, malformed, or expired.

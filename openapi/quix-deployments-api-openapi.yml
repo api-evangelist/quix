@@ -136,6 +136,29 @@ paths:
       - bearerAuth: []
 components:
   schemas:
+    CreateDeploymentRequest:
+      type: object
+      required:
+      - name
+      - workspaceId
+      properties:
+        name:
+          type: string
+        workspaceId:
+          type: string
+        applicationId:
+          type: string
+        type:
+          type: string
+          enum:
+          - Service
+          - Job
+        replicas:
+          type: integer
+        cpuMillicores:
+          type: integer
+        memoryInMb:
+          type: integer
     Deployment:
       type: object
       properties:
@@ -165,29 +188,6 @@ components:
           type: integer
         memoryInMb:
           type: integer
-    CreateDeploymentRequest:
-      type: object
-      required:
-      - name
-      - workspaceId
-      properties:
-        name:
-          type: string
-        workspaceId:
-          type: string
-        applicationId:
-          type: string
-        type:
-          type: string
-          enum:
-          - Service
-          - Job
-        replicas:
-          type: integer
-        cpuMillicores:
-          type: integer
-        memoryInMb:
-          type: integer
     Error:
       type: object
       properties:
@@ -197,6 +197,13 @@ components:
           type: string
         detail:
           type: string
+  responses:
+    Unauthorized:
+      description: Authentication failed - the bearer token is missing, malformed, or expired.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   parameters:
     DeploymentId:
       name: deploymentId
@@ -205,13 +212,6 @@ components:
       description: The deployment identifier.
       schema:
         type: string
-  responses:
-    Unauthorized:
-      description: Authentication failed - the bearer token is missing, malformed, or expired.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   securitySchemes:
     bearerAuth:
       type: http

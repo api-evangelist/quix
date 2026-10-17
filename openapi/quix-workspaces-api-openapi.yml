@@ -68,6 +68,13 @@ paths:
       security:
       - bearerAuth: []
 components:
+  responses:
+    Unauthorized:
+      description: Authentication failed - the bearer token is missing, malformed, or expired.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   schemas:
     Workspace:
       type: object
@@ -90,13 +97,6 @@ components:
           type: string
         detail:
           type: string
-  responses:
-    Unauthorized:
-      description: Authentication failed - the bearer token is missing, malformed, or expired.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   parameters:
     WorkspaceId:
       name: workspaceId
