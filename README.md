@@ -1,4 +1,4 @@
-# Quix (quix)
+# Quix
 
 <!-- API-EVANGELIST-PROVENANCE:BEGIN -->
 > ### About this repository
@@ -66,136 +66,152 @@
 
 Quix is a Python-native stream-processing platform for real-time data and ML. It pairs Quix Streams - an open source (Apache 2.0) Python library for building containerized stream-processing applications on Apache Kafka - with Quix Cloud, a fully managed platform offering managed Kafka, Kubernetes deployments, and a set of HTTP and SignalR/WebSocket APIs for writing data in, reading data out in real time, and managing workspaces, topics, and deployments.
 
-**APIs.json:** [https://raw.githubusercontent.com/api-evangelist/quix/refs/heads/main/apis.yml](https://raw.githubusercontent.com/api-evangelist/quix/refs/heads/main/apis.yml)
+**Areas:** Stream Processing · Real-Time · Kafka · Python · Streaming Data
 
-## Tags
+## Quix on APIs.io
 
-- Stream Processing
-- Real Time
-- Kafka
-- Python
-- Streaming Data
+Everything profiled for Quix is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/quix/](https://apis.io/providers/quix/)** — or go straight to one of the APIs or properties below.
 
-## Timestamps
+### APIs (9)
 
-- **Created:** 2026-06-21
-- **Modified:** 2026-06-21
+- [Quix Streaming Reader API (Real-time)](https://apis.io/apis/quix/streaming-reader-api/) — Subscribe to live parameter data, events, definitions, active streams, topic metrics, and raw packages from Quix topics in real time over a Microsoft…
+- [Quix Streams (Open Source)](https://apis.io/apis/quix/quix-streams-oss/) — Apache 2.0 open source Python library (pip install quixstreams) for building containerized stream-processing applications on Apache Kafka, using a…
+- [Quix Definitions API](https://apis.io/apis/quix/quix-definitions-api/) — Declare parameter and event metadata for a stream (Streaming Writer API).
+- [Quix Deployments API](https://apis.io/apis/quix/quix-deployments-api/) — Manage and monitor service deployments (Portal API).
+- [Quix Event Data API](https://apis.io/apis/quix/quix-event-data-api/) — Publish discrete events into a stream (Streaming Writer API).
+- [Quix Parameter Data API](https://apis.io/apis/quix/quix-parameter-data-api/) — Publish time-series parameter data into a stream (Streaming Writer API).
+- [Quix Streams API](https://apis.io/apis/quix/quix-streams-api/) — Create and close streams within a topic (Streaming Writer API).
+- [Quix Topics API](https://apis.io/apis/quix/quix-topics-api/) — Manage Kafka topics in a workspace (Portal API).
+- [Quix Workspaces API](https://apis.io/apis/quix/quix-workspaces-api/) — Manage Quix Cloud workspaces / environments (Portal API).
 
-## APIs
+### Published properties
 
-### Quix Streaming Writer API
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
 
-Write time-series parameter data, events, and definitions into Quix topics over HTTP REST (or SignalR), an alternative to the Quix Streams SDK for any HTTP-capable language. Authenticated with a Personal Access Token (PAT) bearer token.
+#### AsyncAPI (1)
 
-- **Human URL:** [https://quix.io/docs/quix-cloud/apis/streaming-writer-api/overview.html](https://quix.io/docs/quix-cloud/apis/streaming-writer-api/overview.html)
-- **Base URL:** `https://writer-{environmentId}.cloud.quix.io`
+Event-driven and webhook contracts.
 
-#### Tags
+- [Quix Streaming Reader API (SignalR / WebSocket)](https://apis.io/asyncapis/quix/quix-asyncapi/)
 
-- Streaming
-- Writer
-- Ingest
-- HTTP
+#### Event channels (5)
 
-#### Properties
+Individual events and webhooks the provider emits.
 
-- [Documentation](https://quix.io/docs/quix-cloud/apis/streaming-writer-api/overview.html)
-- [OpenAPI](openapi/quix-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/quix.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/quix.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
+- [ActiveStreams](https://apis.io/channels/quix/activestreams/)
+- [EventData](https://apis.io/channels/quix/eventdata/)
+- [Packages](https://apis.io/channels/quix/packages/)
+- [ParameterData](https://apis.io/channels/quix/parameterdata/)
+- [TopicMetrics](https://apis.io/channels/quix/topicmetrics/)
 
-### Quix Streaming Reader API (Real-time)
+#### Agentic access (1)
 
-Subscribe to live parameter data, events, definitions, active streams, topic metrics, and raw packages from Quix topics in real time over a Microsoft SignalR hub (WebSockets, with Long Polling fallback). Authenticated with a PAT via accessTokenFactory.
+Which operations an agent can call, which act, and which need a human in the loop.
 
-- **Human URL:** [https://quix.io/docs/quix-cloud/apis/streaming-reader-api/overview.html](https://quix.io/docs/quix-cloud/apis/streaming-reader-api/overview.html)
-- **Base URL:** `https://reader-{environmentId}.cloud.quix.io/hub`
+- [Quix Agentic Access](https://apis.io/agentic-access/quix/quix-agentic-access/)
 
-#### Tags
+#### Collections (8)
 
-- Streaming
-- Reader
-- Real Time
-- SignalR
-- WebSocket
+Postman and Open Collection request collections.
 
-#### Properties
+- [Quix Cloud HTTP APIs](https://apis.io/collections/quix/open-quix/)
+- [Quix Cloud HTTP APIs Definitions API](https://apis.io/collections/quix/open-quix-definitions-api/)
+- [Quix Cloud HTTP APIs Definitions Deployments API](https://apis.io/collections/quix/open-quix-deployments-api/)
+- [Quix Cloud HTTP APIs Definitions Event Data API](https://apis.io/collections/quix/open-quix-event-data-api/)
+- [Quix Cloud HTTP APIs Definitions Parameter Data API](https://apis.io/collections/quix/open-quix-parameter-data-api/)
+- [Quix Cloud HTTP APIs Definitions Streams API](https://apis.io/collections/quix/open-quix-streams-api/)
+- [Quix Cloud HTTP APIs Definitions Topics API](https://apis.io/collections/quix/open-quix-topics-api/)
+- [Quix Cloud HTTP APIs Definitions Workspaces API](https://apis.io/collections/quix/open-quix-workspaces-api/)
 
-- [Documentation](https://quix.io/docs/quix-cloud/apis/streaming-reader-api/overview.html)
-- [AsyncAPI](asyncapi/quix-asyncapi.yml) — [AsyncAPI Specification](https://www.asyncapi.com/docs/reference/specification/latest)
-- [Postman Collection](collections/quix.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/quix.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
+#### Governance rules (1)
 
-### Quix Portal API (Management)
+Spectral rulesets for the provider's contracts.
 
-Account-wide HTTP REST API to automate and monitor Quix Cloud infrastructure - workspaces, topics, deployments, and persistent data - as an alternative to the Quix portal UI and CLI. Authenticated with a PAT bearer token.
+- [Quix — asyncapi rules](https://apis.io/rules/quix/quix-asyncapi-spectral-rules/)
 
-- **Human URL:** [https://quix.io/docs/develop/apis-overview.html](https://quix.io/docs/develop/apis-overview.html)
-- **Base URL:** `https://portal-api.platform.quix.io`
+#### Security (2)
 
-#### Tags
+Authentication, trust centre, and vulnerability disclosure.
 
-- Management
-- Portal
-- Automation
+- [Quix Authentication](https://apis.io/security/quix/quix-authentication/)
+- [Quix Domain Security](https://apis.io/security/quix/quix-domain-security/)
 
-#### Properties
+#### Plans and pricing (1)
 
-- [Documentation](https://quix.io/docs/develop/apis-overview.html)
-- [OpenAPI](openapi/quix-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/quix.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/quix.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
+Published plans, tiers and prices.
 
-### Quix Topics & Deployments API
+- [Quix Plans Pricing](https://apis.io/plans/quix/quix-plans-pricing/)
 
-The topic- and deployment-management surface of the Portal API - create, list, update, and delete Kafka topics and manage the lifecycle (start, stop, status) of pipeline service deployments in a workspace.
+#### Rate limits (1)
 
-- **Human URL:** [https://quix.io/docs/develop/apis-overview.html](https://quix.io/docs/develop/apis-overview.html)
-- **Base URL:** `https://portal-api.platform.quix.io`
+Published request limits.
 
-#### Tags
+- [Quix Rate Limits](https://apis.io/rate-limits/quix/quix-rate-limits/)
 
-- Topics
-- Deployments
-- Infrastructure
+#### FinOps (1)
 
-#### Properties
+What the API costs to run, by operation.
 
-- [Documentation](https://quix.io/docs/develop/apis-overview.html)
-- [OpenAPI](openapi/quix-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/quix.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/quix.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
+- [Quix Finops](https://apis.io/finops/quix/quix-finops/)
 
-### Quix Streams (Open Source)
+## Where to find this API
 
-Apache 2.0 open source Python library (pip install quixstreams) for building containerized stream-processing applications on Apache Kafka, using a declarative StreamingDataFrame and an Application runtime with windowing, stateful processing, streaming joins, and sources/sinks. Requires Python 3.9+; not a hosted API - included here as the OSS foundation of the platform.
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
 
-- **Human URL:** [https://quix.io/docs/quix-streams/introduction.html](https://quix.io/docs/quix-streams/introduction.html)
-- **Base URL:** `https://github.com/quixio/quix-streams`
-
-#### Tags
-
-- Open Source
-- Python
-- Kafka
-- Library
-
-#### Properties
-
-- [Documentation](https://quix.io/docs/quix-streams/introduction.html)
-- [Source Code](https://github.com/quixio/quix-streams)
-
-## Common Properties
-
-- [GitHub Organization](https://github.com/quixio)
-- [LinkedIn](https://www.linkedin.com/company/quix)
 - [Website](https://quix.io/)
 - [Documentation](https://quix.io/docs/)
-- [Plans](plans/quix-plans-pricing.yml)
-- [Rate Limits](rate-limits/quix-rate-limits.yml)
-- [Fin Ops](finops/quix-finops.yml)
+- [Blog](https://quix.io/blog)
+- [GitHub](https://github.com/quixio)
 
-## Maintainers
+## API Evangelist rating
 
-**FN:** Kin Lane
-**Email:** kin@apievangelist.com
+**Kin Score 29.3** — thin · rubric 0.24.0 · scored 2026-10-17
+
+| Facet | Score |
+|---|---|
+| Discoverability | 66.1 |
+| Contract quality | 58.2 |
+| Contract governance | 13.6 |
+| Operational transparency | 10.5 |
+| Developer ergonomics | 23.8 |
+| Access clarity | 7.9 |
+
+**Agent readiness 19.0** — agent-aware
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | derived (partial credit) |
+| Reversibility Documented | — |
+| MCP Server | — |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | — |
+| Error Semantics | — |
+| OpenAPI Examples | — |
+| Rate Limit Signal | derived (partial credit) |
+| Event Surface Described | derived (partial credit) |
+| Agent Skills | — |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+
+**Regulatory alignment 11.8** — Horizontal (data, software, accessibility, platform)
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/quix/](https://apis.io/providers/quix/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Quix: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/quix/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
